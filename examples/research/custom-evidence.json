@@ -1,0 +1,3092 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "id": "custom-review-work",
+  "created_at": "2026-10-28T18:15:52.055451+00:00",
+  "provenance": {
+    "kind": "fresh_compiler_execution",
+    "environment": {
+      "paths": {
+        "clang": "/usr/lib/llvm-21/bin/clang",
+        "opt": "/usr/lib/llvm-21/bin/opt",
+        "llc": "/usr/lib/llvm-21/bin/llc",
+        "llvm_dis": "/usr/lib/llvm-21/bin/llvm-dis"
+      },
+      "versions": {
+        "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+        "opt": "Ubuntu LLVM version 21.1.8",
+        "llc": "Ubuntu LLVM version 21.1.8",
+        "llvm_dis": "Ubuntu LLVM version 21.1.8"
+      },
+      "target_triple": "x86_64-pc-linux-gnu",
+      "clang_flags": [
+        "-std=c17",
+        "-fno-lto",
+        "-fPIE",
+        "-march=x86-64"
+      ],
+      "llc_flags": [
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic"
+      ],
+      "link_flags": [
+        "-pie"
+      ],
+      "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+      "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.43",
+      "kernel": "7.0.0-1017-azure",
+      "cpu_model": "AMD EPYC 9V45 96-Core Processor",
+      "wsl": false,
+      "libraries": {
+        "fastapi": "0.142.2",
+        "uvicorn": "0.54.0",
+        "pydantic": "2.13.5",
+        "langgraph": "1.2.14"
+      },
+      "git_commit": null,
+      "git_dirty": null,
+      "source_root": "/__w/Evidence-Guided-Compiler-Auto-Tuner/Evidence-Guided-Compiler-Auto-Tuner"
+    },
+    "source_sha256": "b17841825f189b7fa58d5f930e2f0620acdc84bc4fdb0c9e7be1422f5ab115d2",
+    "context_hash": "c2453bebe70dd8c11600a20b5311f3f2b97f43fdb8eba67523ac44b0dca954f5",
+    "measurement": "Whole-process wall time; randomized paired order; separate warmups; custom runs include prlimit launcher cost",
+    "ci": {
+      "run_id": "40743155929",
+      "commit": "8ca48dac8db8cba55d04ae491b20ec7267528d46",
+      "runner": "GitHub Actions Ubuntu 26.04 container"
+    }
+  },
+  "request": {
+    "benchmark_id": "custom",
+    "actions": [
+      "instcombine",
+      "gvn"
+    ],
+    "size": 200000,
+    "seed": 29,
+    "repeat": 6,
+    "rounds": 10,
+    "budget": 3,
+    "fuzz_cases": 12,
+    "memory_role": "evaluate",
+    "grid_seeds": [
+      101,
+      211
+    ],
+    "source": "#include <stdint.h>\nuint64_t kernel(uint64_t size, uint64_t seed) {\n    uint64_t total=0;\n    for (uint64_t i=0;i<size;i++) total += ((i ^ seed) & 1023u);\n    return total;\n}\n",
+    "reference_source": "#include <stdint.h>\nuint64_t reference(uint64_t size, uint64_t seed) {\n    uint64_t total=0, i=size;\n    while (i) { --i; total += ((i ^ seed) & 1023u); }\n    return total;\n}\n",
+    "trusted_local_code": true,
+    "grid_sizes": [
+      100000,
+      300000
+    ]
+  },
+  "source": "#include <stdint.h>\nuint64_t kernel(uint64_t size, uint64_t seed) {\n    uint64_t total=0;\n    for (uint64_t i=0;i<size;i++) total += ((i ^ seed) & 1023u);\n    return total;\n}\n\n#include <stdint.h>\n#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\nextern uint64_t kernel(uint64_t,uint64_t);\nint main(int argc,char **argv) {\n    uint64_t n=1,seed=0,repeat=1;\n    for(int i=1;i+1<argc;i+=2) {\n      uint64_t x=strtoull(argv[i+1],0,10);\n      if(!strcmp(argv[i],\"--size\"))n=x;\n      else if(!strcmp(argv[i],\"--seed\"))seed=x;\n      else if(!strcmp(argv[i],\"--repeat\"))repeat=x;\n      else return 2;\n    }\n    if(!n || n>16000000 || !repeat || repeat>100)return 2;\n    uint64_t checksum=14695981039346656037ULL;\n    for(uint64_t r=0;r<repeat;r++){\n      uint64_t v=kernel(n,seed+r);\n      for(unsigned s=0;s<64;s+=8){checksum^=(v>>s)&255;checksum*=1099511628211ULL;}\n    }\n    printf(\"checksum:%016llx\\n\",(unsigned long long)checksum);\n    return 0;\n}\n",
+  "features": {
+    "instruction_count": 96,
+    "basic_blocks": 20,
+    "conditional_branches": 15,
+    "phi_nodes": 28,
+    "loads": 2,
+    "stores": 0,
+    "loop_metadata_refs": 5,
+    "loop_present": true,
+    "extractor": "text-ir-v1",
+    "caveat": "Approximate textual IR counts; not a runtime predictor.",
+    "fingerprint": "c9ed5950e9fe86a95fe9b81aad20a0a19f8eebf58275350c08bf4cd5ae567565"
+  },
+  "ablation": [
+    {
+      "id": "variant-0",
+      "actions": [],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 1280385.0,
+      "compile_ms": 78.57433,
+      "executable_bytes": 17712,
+      "ir_changed": false,
+      "ir_instructions": 96,
+      "role": "empty_control",
+      "samples_ns": [
+        1267445,
+        3334540,
+        1266003,
+        1278772,
+        1273414,
+        3635515,
+        3336542,
+        1266985,
+        3350974,
+        1281998
+      ],
+      "versus_full": {
+        "label": "win",
+        "candidate_median_ns": 1280385.0,
+        "baseline_median_ns": 3334789.5,
+        "candidate_mad_ns": 13891.0,
+        "baseline_mad_ns": 217178.5,
+        "runtime_reduction_percent": 61.60522275843798,
+        "paired_wins": 8,
+        "paired_rounds": 10,
+        "bootstrap_interval_percent": [
+          -78.71779505904432,
+          61.82342243790799
+        ],
+        "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+      }
+    },
+    {
+      "id": "variant-1",
+      "actions": [
+        "instcombine",
+        "gvn"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 3334789.5,
+      "compile_ms": 93.989882,
+      "executable_bytes": 17712,
+      "ir_changed": false,
+      "ir_instructions": 96,
+      "role": "full_sequence",
+      "samples_ns": [
+        1294897,
+        1282739,
+        1277651,
+        3344153,
+        1288247,
+        3746322,
+        3345116,
+        3325426,
+        3345587,
+        3357614
+      ],
+      "versus_full": {
+        "label": "inconclusive",
+        "candidate_median_ns": 3334789.5,
+        "baseline_median_ns": 3334789.5,
+        "candidate_mad_ns": 217178.5,
+        "baseline_mad_ns": 217178.5,
+        "runtime_reduction_percent": 0.0,
+        "paired_wins": 0,
+        "paired_rounds": 10,
+        "bootstrap_interval_percent": [
+          0.0,
+          0.0
+        ],
+        "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+      }
+    },
+    {
+      "id": "variant-2",
+      "actions": [
+        "gvn"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 3325766.5,
+      "compile_ms": 94.052666,
+      "executable_bytes": 17712,
+      "ir_changed": false,
+      "ir_instructions": 96,
+      "role": "remove:instcombine",
+      "samples_ns": [
+        1293336,
+        3330382,
+        3327750,
+        3323783,
+        3552749,
+        3338836,
+        3342912,
+        1305743,
+        1296600,
+        1270510
+      ],
+      "versus_full": {
+        "label": "inconclusive",
+        "candidate_median_ns": 3325766.5,
+        "baseline_median_ns": 3334789.5,
+        "candidate_mad_ns": 122064.0,
+        "baseline_mad_ns": 217178.5,
+        "runtime_reduction_percent": 0.2705718007088631,
+        "paired_wins": 7,
+        "paired_rounds": 10,
+        "bootstrap_interval_percent": [
+          -158.52045454016195,
+          61.244469206749066
+        ],
+        "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+      }
+    },
+    {
+      "id": "variant-3",
+      "actions": [
+        "instcombine"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 1284381.0,
+      "compile_ms": 93.985325,
+      "executable_bytes": 17712,
+      "ir_changed": false,
+      "ir_instructions": 96,
+      "role": "remove:gvn",
+      "samples_ns": [
+        3356873,
+        3364875,
+        1276359,
+        1271943,
+        4350696,
+        1277240,
+        1274055,
+        1285052,
+        3318275,
+        1283710
+      ],
+      "versus_full": {
+        "label": "inconclusive",
+        "candidate_median_ns": 1284381.0,
+        "baseline_median_ns": 3334789.5,
+        "candidate_mad_ns": 11382.0,
+        "baseline_mad_ns": 217178.5,
+        "runtime_reduction_percent": 61.48539510514832,
+        "paired_wins": 7,
+        "paired_rounds": 10,
+        "bootstrap_interval_percent": [
+          -159.9059905293704,
+          61.86756407377294
+        ],
+        "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+      }
+    },
+    {
+      "id": "variant-4",
+      "actions": [
+        "gvn",
+        "instcombine"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 3308935.5,
+      "compile_ms": 94.002861,
+      "executable_bytes": 17712,
+      "ir_changed": false,
+      "ir_instructions": 96,
+      "role": "reorder",
+      "samples_ns": [
+        3285976,
+        1271432,
+        1268327,
+        3355041,
+        1274106,
+        1269659,
+        3356002,
+        3351076,
+        3352867,
+        3331895
+      ],
+      "versus_full": {
+        "label": "inconclusive",
+        "candidate_median_ns": 3308935.5,
+        "baseline_median_ns": 3334789.5,
+        "candidate_mad_ns": 46586.0,
+        "baseline_mad_ns": 217178.5,
+        "runtime_reduction_percent": 0.7752813183560803,
+        "paired_wins": 5,
+        "paired_rounds": 10,
+        "bootstrap_interval_percent": [
+          -153.7635039698138,
+          61.905779170568145
+        ],
+        "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+      }
+    }
+  ],
+  "search": {
+    "guided": [
+      {
+        "id": "variant-5",
+        "actions": [
+          "licm"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 1292995,
+        "compile_ms": 110.186242,
+        "executable_bytes": 17712,
+        "ir_changed": true,
+        "ir_instructions": 111,
+        "strategy": "guided",
+        "ordinal": 1,
+        "action_ids": [
+          "licm"
+        ],
+        "search_median_ns": 1292995,
+        "samples_ns": [
+          1287386,
+          1292995,
+          3351305
+        ]
+      },
+      {
+        "id": "variant-8",
+        "actions": [
+          "loop-unroll"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 3344314,
+        "compile_ms": 110.92634,
+        "executable_bytes": 17712,
+        "ir_changed": true,
+        "ir_instructions": 111,
+        "strategy": "guided",
+        "ordinal": 2,
+        "action_ids": [
+          "loop-unroll"
+        ],
+        "search_median_ns": 3344314,
+        "samples_ns": [
+          3330884,
+          3344976,
+          3344314
+        ]
+      },
+      {
+        "id": "variant-10",
+        "actions": [
+          "loop-vectorize"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 1050,
+        "median_ns": 3355592,
+        "compile_ms": 110.183107,
+        "executable_bytes": 17760,
+        "ir_changed": true,
+        "ir_instructions": 155,
+        "strategy": "guided",
+        "ordinal": 3,
+        "action_ids": [
+          "loop-vectorize"
+        ],
+        "search_median_ns": 3355592,
+        "samples_ns": [
+          3355592,
+          3366759,
+          3309471
+        ]
+      }
+    ],
+    "random": [
+      {
+        "id": "variant-6",
+        "actions": [
+          "simplifycfg",
+          "loop-vectorize",
+          "loop-unroll"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 1050,
+        "median_ns": 3370324,
+        "compile_ms": 110.197087,
+        "executable_bytes": 17760,
+        "ir_changed": true,
+        "ir_instructions": 161,
+        "strategy": "random",
+        "ordinal": 1,
+        "action_ids": [
+          "simplifycfg",
+          "loop-vectorize",
+          "loop-unroll"
+        ],
+        "search_median_ns": 3370324,
+        "samples_ns": [
+          3380900,
+          3348441,
+          3370324
+        ]
+      },
+      {
+        "id": "variant-9",
+        "actions": [
+          "loop-fusion"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 1273685,
+        "compile_ms": 94.026968,
+        "executable_bytes": 17712,
+        "ir_changed": true,
+        "ir_instructions": 102,
+        "strategy": "random",
+        "ordinal": 2,
+        "action_ids": [
+          "loop-fusion"
+        ],
+        "search_median_ns": 1273685,
+        "samples_ns": [
+          1273685,
+          3366919,
+          1270640
+        ]
+      },
+      {
+        "id": "variant-11",
+        "actions": [
+          "licm",
+          "loop-interchange"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 3323763,
+        "compile_ms": 93.966426,
+        "executable_bytes": 17712,
+        "ir_changed": true,
+        "ir_instructions": 111,
+        "strategy": "random",
+        "ordinal": 3,
+        "action_ids": [
+          "licm",
+          "loop-interchange"
+        ],
+        "search_median_ns": 3323763,
+        "samples_ns": [
+          3323763,
+          1278943,
+          3393229
+        ]
+      }
+    ],
+    "adaptive": [
+      {
+        "id": "variant-7",
+        "actions": [
+          "dce"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 4166487,
+        "compile_ms": 93.98881,
+        "executable_bytes": 17712,
+        "ir_changed": false,
+        "ir_instructions": 96,
+        "strategy": "adaptive",
+        "ordinal": 1,
+        "action_ids": [
+          "dce"
+        ],
+        "search_median_ns": 4166487,
+        "samples_ns": [
+          4166487,
+          4248461,
+          3759302
+        ]
+      },
+      {
+        "id": "variant-2",
+        "actions": [
+          "gvn"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 1290761,
+        "compile_ms": 94.052666,
+        "executable_bytes": 17712,
+        "ir_changed": false,
+        "ir_instructions": 96,
+        "role": "remove:instcombine",
+        "strategy": "adaptive",
+        "ordinal": 2,
+        "action_ids": [
+          "gvn"
+        ],
+        "search_median_ns": 1290761,
+        "samples_ns": [
+          1269288,
+          1290761,
+          3359938
+        ]
+      },
+      {
+        "id": "variant-3",
+        "actions": [
+          "instcombine"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 1293165,
+        "compile_ms": 93.985325,
+        "executable_bytes": 17712,
+        "ir_changed": false,
+        "ir_instructions": 96,
+        "role": "remove:gvn",
+        "strategy": "adaptive",
+        "ordinal": 3,
+        "action_ids": [
+          "instcombine"
+        ],
+        "search_median_ns": 1293165,
+        "samples_ns": [
+          3351846,
+          1271792,
+          1293165
+        ]
+      }
+    ]
+  },
+  "winners": {
+    "guided": {
+      "id": "variant-5",
+      "actions": [
+        "licm"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 1292995,
+      "compile_ms": 110.186242,
+      "executable_bytes": 17712,
+      "ir_changed": true,
+      "ir_instructions": 111,
+      "strategy": "guided",
+      "ordinal": 1,
+      "action_ids": [
+        "licm"
+      ],
+      "search_median_ns": 1292995,
+      "samples_ns": [
+        1287386,
+        1292995,
+        3351305
+      ]
+    },
+    "random": {
+      "id": "variant-9",
+      "actions": [
+        "loop-fusion"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 1273685,
+      "compile_ms": 94.026968,
+      "executable_bytes": 17712,
+      "ir_changed": true,
+      "ir_instructions": 102,
+      "strategy": "random",
+      "ordinal": 2,
+      "action_ids": [
+        "loop-fusion"
+      ],
+      "search_median_ns": 1273685,
+      "samples_ns": [
+        1273685,
+        3366919,
+        1270640
+      ]
+    },
+    "adaptive": {
+      "id": "variant-2",
+      "actions": [
+        "gvn"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 1290761,
+      "compile_ms": 94.052666,
+      "executable_bytes": 17712,
+      "ir_changed": false,
+      "ir_instructions": 96,
+      "role": "remove:instcombine",
+      "strategy": "adaptive",
+      "ordinal": 2,
+      "action_ids": [
+        "gvn"
+      ],
+      "search_median_ns": 1290761,
+      "samples_ns": [
+        1269288,
+        1290761,
+        3359938
+      ]
+    }
+  },
+  "confirmation": {
+    "tuning_input": {
+      "size": 200000,
+      "seed": 29,
+      "repeat": 6
+    },
+    "holdout_input": {
+      "size": 250000,
+      "seed": 1009,
+      "repeat": 6
+    },
+    "comparisons": {
+      "tuning": {
+        "guided": {
+          "label": "inconclusive",
+          "candidate_median_ns": 1291316.5,
+          "baseline_median_ns": 1270665.5,
+          "candidate_mad_ns": 17691.5,
+          "baseline_mad_ns": 3400.0,
+          "runtime_reduction_percent": -1.625211355781686,
+          "paired_wins": 4,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -162.4969690289871,
+            0.22414297583637222
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "random": {
+          "label": "inconclusive",
+          "candidate_median_ns": 1285498.0,
+          "baseline_median_ns": 1270665.5,
+          "candidate_mad_ns": 17912.0,
+          "baseline_mad_ns": 3400.0,
+          "runtime_reduction_percent": -1.1673017013525522,
+          "paired_wins": 3,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -161.3953037156881,
+            0.27060935434872757
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "adaptive": {
+          "label": "inconclusive",
+          "candidate_median_ns": 1293550.0,
+          "baseline_median_ns": 1270665.5,
+          "candidate_mad_ns": 11216.5,
+          "baseline_mad_ns": 3400.0,
+          "runtime_reduction_percent": -1.8009853891523875,
+          "paired_wins": 0,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -162.03607177959393,
+            -0.8942570711763187
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        }
+      },
+      "holdout": {
+        "guided": {
+          "label": "inconclusive",
+          "candidate_median_ns": 3340002.5,
+          "baseline_median_ns": 2312961.0,
+          "candidate_mad_ns": 7422.0,
+          "baseline_mad_ns": 1027844.0,
+          "runtime_reduction_percent": -44.40375345714864,
+          "paired_wins": 4,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -160.10859915270075,
+            0.23786594616939105
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "random": {
+          "label": "loss",
+          "candidate_median_ns": 3348150.5,
+          "baseline_median_ns": 2312961.0,
+          "candidate_mad_ns": 7436.5,
+          "baseline_mad_ns": 1027844.0,
+          "runtime_reduction_percent": -44.756029176453914,
+          "paired_wins": 2,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -161.15894506103334,
+            -0.01511496324662076
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "adaptive": {
+          "label": "inconclusive",
+          "candidate_median_ns": 3346958.5,
+          "baseline_median_ns": 2312961.0,
+          "candidate_mad_ns": 7722.0,
+          "baseline_mad_ns": 1027844.0,
+          "runtime_reduction_percent": -44.70449350421386,
+          "paired_wins": 3,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -160.8427917652163,
+            0.2326480818768406
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        }
+      }
+    },
+    "tuning_samples_ns": {
+      "o3": [
+        1264551,
+        1267325,
+        1282279,
+        1268287,
+        1267415,
+        1274125,
+        1293685,
+        1271111,
+        1285994,
+        1270220
+      ],
+      "guided": [
+        1292513,
+        1304762,
+        1275337,
+        1266304,
+        3345316,
+        1271913,
+        3349492,
+        1290120,
+        1281016,
+        3334289
+      ],
+      "random": [
+        1286915,
+        1263580,
+        3355731,
+        1264211,
+        1282719,
+        1284081,
+        1270961,
+        1290320,
+        3341160,
+        3343694
+      ],
+      "adaptive": [
+        1296580,
+        1290520,
+        3340559,
+        1274286,
+        3342632,
+        1288046,
+        3359027,
+        1276910,
+        1296660,
+        1287757
+      ]
+    },
+    "holdout_samples_ns": {
+      "o3": [
+        3312036,
+        3338435,
+        1284080,
+        1287155,
+        1313886,
+        3360660,
+        3350984,
+        1283901,
+        1286154,
+        3376282
+      ],
+      "guided": [
+        3328831,
+        3330494,
+        3339607,
+        3334610,
+        3347620,
+        3356072,
+        3347229,
+        3371987,
+        3335802,
+        3340398
+      ],
+      "random": [
+        3340519,
+        3344936,
+        3357004,
+        3335091,
+        3347589,
+        3355392,
+        3359857,
+        3357805,
+        3348712,
+        3345225
+      ],
+      "adaptive": [
+        3354710,
+        3339266,
+        3356502,
+        3346747,
+        3354871,
+        3337905,
+        3343013,
+        3343363,
+        3354840,
+        3347170
+      ]
+    }
+  },
+  "robustness": {
+    "cells": [
+      {
+        "workload": {
+          "size": 100000,
+          "seed": 101,
+          "repeat": 6
+        },
+        "comparison": {
+          "label": "inconclusive",
+          "candidate_median_ns": 1268327.0,
+          "baseline_median_ns": 1289849.5,
+          "candidate_mad_ns": 3685.5,
+          "baseline_mad_ns": 6885.5,
+          "runtime_reduction_percent": 1.6686055233575692,
+          "paired_wins": 8,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            0.1964199277510903,
+            2.3933185879636443
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "samples_ns": {
+          "guided": [
+            1267566,
+            1300194,
+            1269088,
+            1273544,
+            1264762,
+            1258112,
+            1265252,
+            1264521,
+            1309900,
+            1269318
+          ],
+          "o3": [
+            1285422,
+            1294917,
+            1300816,
+            1304451,
+            1269288,
+            1297271,
+            1294277,
+            1278753,
+            1285002,
+            1283500
+          ]
+        }
+      },
+      {
+        "workload": {
+          "size": 100000,
+          "seed": 211,
+          "repeat": 6
+        },
+        "comparison": {
+          "label": "inconclusive",
+          "candidate_median_ns": 1269844.5,
+          "baseline_median_ns": 1268538.0,
+          "candidate_mad_ns": 9309.5,
+          "baseline_mad_ns": 5449.5,
+          "runtime_reduction_percent": -0.10299257885850732,
+          "paired_wins": 4,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -1.5772799793159153,
+            1.0870462688892357
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "samples_ns": {
+          "guided": [
+            1291282,
+            1275608,
+            1264711,
+            1290831,
+            1273595,
+            1262678,
+            1258392,
+            1257941,
+            1266094,
+            1286404
+          ],
+          "o3": [
+            1268608,
+            1270530,
+            1261045,
+            1265132,
+            1283800,
+            1243599,
+            1265332,
+            1268468,
+            1304461,
+            1284912
+          ]
+        }
+      },
+      {
+        "workload": {
+          "size": 300000,
+          "seed": 101,
+          "repeat": 6
+        },
+        "comparison": {
+          "label": "inconclusive",
+          "candidate_median_ns": 3335711.5,
+          "baseline_median_ns": 3327348.5,
+          "candidate_mad_ns": 12384.0,
+          "baseline_mad_ns": 9740.0,
+          "runtime_reduction_percent": -0.25134127068444645,
+          "paired_wins": 2,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -162.44317419022605,
+            0.2129012033924904
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "samples_ns": {
+          "guided": [
+            3349983,
+            3421761,
+            3317664,
+            3362833,
+            3339367,
+            3335771,
+            3321780,
+            3324875,
+            3333027,
+            3335652
+          ],
+          "o3": [
+            3335882,
+            3338295,
+            3351295,
+            3326107,
+            3326147,
+            3328550,
+            1268377,
+            3332286,
+            1264832,
+            1271622
+          ]
+        }
+      },
+      {
+        "workload": {
+          "size": 300000,
+          "seed": 211,
+          "repeat": 6
+        },
+        "comparison": {
+          "label": "inconclusive",
+          "candidate_median_ns": 3330429.0,
+          "baseline_median_ns": 3333508.0,
+          "candidate_mad_ns": 10867.0,
+          "baseline_mad_ns": 6274.0,
+          "runtime_reduction_percent": 0.09236516006561057,
+          "paired_wins": 4,
+          "paired_rounds": 10,
+          "bootstrap_interval_percent": [
+            -43.391490880622975,
+            0.41969415811889954
+          ],
+          "interval_note": "Exploratory paired bootstrap interval; not a multiple-comparison-adjusted significance test."
+        },
+        "samples_ns": {
+          "guided": [
+            3319497,
+            3345366,
+            3355612,
+            3326218,
+            3334640,
+            3319627,
+            3335010,
+            3315131,
+            3322973,
+            3347029
+          ],
+          "o3": [
+            3333488,
+            3334050,
+            1316880,
+            3352977,
+            3317894,
+            3333748,
+            3322472,
+            1267445,
+            3333528,
+            3335020
+          ]
+        }
+      }
+    ],
+    "selection": "Winner frozen on tuning input; grid exploratory; reserved holdout not used for search, objective selection or training"
+  },
+  "learning": {
+    "role": "evaluate",
+    "eligible_records": 9,
+    "source_programs": 1,
+    "new_training_records": 0,
+    "method": "Feature-neighbor reward prior with exploration; equal proposal budgets",
+    "context_rule": "Exact compiler/target/flags/catalog match; same source hash excluded"
+  },
+  "remarks": {
+    "items": [],
+    "note": "Only remarks emitted by LLVM are shown; empty means no remark was emitted",
+    "parse_error": null
+  },
+  "cfg": {
+    "before": {
+      "functions": [
+        {
+          "name": "kernel",
+          "blocks": [
+            {
+              "id": "entry",
+              "instructions": [
+                "%3 = icmp eq i64 %0, 0, !dbg !12",
+                "br i1 %3, label %4, label %6, !dbg !13"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                "4",
+                "6"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "4",
+              "instructions": [
+                "%5 = phi i64 [ 0, %2 ], [ %11, %6 ], !dbg !14",
+                "ret i64 %5, !dbg !15"
+              ],
+              "source_lines": [
+                0,
+                5
+              ],
+              "successors": [],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "6",
+              "instructions": [
+                "%7 = phi i64 [ %12, %6 ], [ 0, %2 ]",
+                "%8 = phi i64 [ %11, %6 ], [ 0, %2 ]",
+                "%9 = xor i64 %7, %1, !dbg !16",
+                "%10 = and i64 %9, 1023, !dbg !17",
+                "%11 = add i64 %10, %8, !dbg !18",
+                "%12 = add nuw i64 %7, 1, !dbg !19",
+                "%13 = icmp eq i64 %12, %0, !dbg !12",
+                "br i1 %13, label %4, label %6, !dbg !13, !llvm.loop !20"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                "4",
+                "6"
+              ],
+              "instruction_count": 8,
+              "reachable": true
+            }
+          ],
+          "edges": [
+            {
+              "from": "entry",
+              "to": "4",
+              "back_edge": false
+            },
+            {
+              "from": "entry",
+              "to": "6",
+              "back_edge": false
+            },
+            {
+              "from": "6",
+              "to": "4",
+              "back_edge": false
+            },
+            {
+              "from": "6",
+              "to": "6",
+              "back_edge": true
+            }
+          ]
+        },
+        {
+          "name": "main",
+          "blocks": [
+            {
+              "id": "entry",
+              "instructions": [
+                "%3 = icmp sgt i32 %0, 2, !dbg !25",
+                "br i1 %3, label %10, label %39, !dbg !26"
+              ],
+              "source_lines": [
+                15
+              ],
+              "successors": [
+                "10",
+                "39"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "4",
+              "instructions": [
+                "%5 = add nuw nsw i64 %11, 2, !dbg !27",
+                "%6 = trunc i64 %11 to i32, !dbg !25",
+                "%7 = add i32 %6, 3, !dbg !25",
+                "%8 = icmp slt i32 %7, %0, !dbg !25",
+                "%9 = add i64 %12, 2, !dbg !28",
+                "br i1 %8, label %10, label %37, !dbg !26, !llvm.loop !29"
+              ],
+              "source_lines": [
+                15
+              ],
+              "successors": [
+                "10",
+                "37"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "10",
+              "instructions": [
+                "%11 = phi i64 [ %5, %4 ], [ 1, %2 ]",
+                "%12 = phi i64 [ %9, %4 ], [ 2, %2 ]",
+                "%13 = phi i32 [ %36, %4 ], [ 0, %2 ]",
+                "%14 = phi i64 [ %35, %4 ], [ 1, %2 ]",
+                "%15 = phi i64 [ %33, %4 ], [ 1, %2 ]",
+                "%16 = phi i64 [ %32, %4 ], [ 0, %2 ]",
+                "%17 = getelementptr inbounds nuw ptr, ptr %1, i64 %12, !dbg !31",
+                "%18 = load ptr, ptr %17, align 8, !dbg !31, !tbaa !32",
+                "%19 = tail call i64 @strtoull(ptr noundef captures(none) %18, ptr noundef null, i32 noundef 10) #5, !dbg !37",
+                "%20 = getelementptr inbounds nuw ptr, ptr %1, i64 %11, !dbg !38",
+                "%21 = load ptr, ptr %20, align 8, !dbg !38, !tbaa !32",
+                "%22 = tail call i32 @strcmp(ptr noundef nonnull dereferenceable(1) %21, ptr noundef nonnull dereferenceable(7) @.str) #6, !dbg !39",
+                "%23 = icmp eq i32 %22, 0, !dbg !39",
+                "br i1 %23, label %31, label %24, !dbg !40"
+              ],
+              "source_lines": [
+                16,
+                17
+              ],
+              "successors": [
+                "31",
+                "24"
+              ],
+              "instruction_count": 14,
+              "reachable": true
+            },
+            {
+              "id": "24",
+              "instructions": [
+                "%25 = tail call i32 @strcmp(ptr noundef nonnull dereferenceable(1) %21, ptr noundef nonnull dereferenceable(7) @.str.1) #6, !dbg !41",
+                "%26 = icmp eq i32 %25, 0, !dbg !41",
+                "br i1 %26, label %31, label %27, !dbg !42"
+              ],
+              "source_lines": [
+                18
+              ],
+              "successors": [
+                "31",
+                "27"
+              ],
+              "instruction_count": 3,
+              "reachable": true
+            },
+            {
+              "id": "27",
+              "instructions": [
+                "%28 = tail call i32 @strcmp(ptr noundef nonnull dereferenceable(1) %21, ptr noundef nonnull dereferenceable(9) @.str.2) #6, !dbg !43",
+                "%29 = icmp eq i32 %28, 0, !dbg !43",
+                "br i1 %29, label %30, label %31, !dbg !44"
+              ],
+              "source_lines": [
+                19
+              ],
+              "successors": [
+                "30",
+                "31"
+              ],
+              "instruction_count": 3,
+              "reachable": true
+            },
+            {
+              "id": "30",
+              "instructions": [
+                "br label %31, !dbg !30"
+              ],
+              "source_lines": [
+                21
+              ],
+              "successors": [
+                "31"
+              ],
+              "instruction_count": 1,
+              "reachable": true
+            },
+            {
+              "id": "31",
+              "instructions": [
+                "%32 = phi i64 [ %16, %27 ], [ %16, %10 ], [ %19, %24 ], [ %16, %30 ], !dbg !45",
+                "%33 = phi i64 [ %15, %27 ], [ %15, %10 ], [ %15, %24 ], [ %19, %30 ], !dbg !46",
+                "%34 = phi i1 [ false, %27 ], [ true, %10 ], [ true, %24 ], [ true, %30 ]",
+                "%35 = phi i64 [ %14, %27 ], [ %19, %10 ], [ %14, %24 ], [ %14, %30 ], !dbg !47",
+                "%36 = phi i32 [ 2, %27 ], [ %13, %10 ], [ %13, %24 ], [ %13, %30 ]",
+                "br i1 %34, label %4, label %37"
+              ],
+              "source_lines": [
+                14,
+                0
+              ],
+              "successors": [
+                "4",
+                "37"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "37",
+              "instructions": [
+                "%38 = xor i1 %34, true",
+                "br label %39"
+              ],
+              "source_lines": [],
+              "successors": [
+                "39"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "39",
+              "instructions": [
+                "%40 = phi i1 [ false, %2 ], [ %38, %37 ], !dbg !25",
+                "%41 = phi i64 [ 0, %2 ], [ %32, %37 ], !dbg !45",
+                "%42 = phi i64 [ 1, %2 ], [ %33, %37 ], !dbg !48",
+                "%43 = phi i64 [ 1, %2 ], [ %35, %37 ], !dbg !47",
+                "%44 = phi i32 [ 0, %2 ], [ %36, %37 ]",
+                "br i1 %40, label %84, label %45"
+              ],
+              "source_lines": [
+                15,
+                14
+              ],
+              "successors": [
+                "84",
+                "45"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "45",
+              "instructions": [
+                "%46 = add i64 %43, -16000001, !dbg !49",
+                "%47 = icmp ult i64 %46, -16000000, !dbg !49",
+                "%48 = add i64 %42, -101, !dbg !49",
+                "%49 = icmp ult i64 %48, -100, !dbg !49",
+                "%50 = select i1 %47, i1 true, i1 %49, !dbg !49",
+                "br i1 %50, label %84, label %51, !dbg !49"
+              ],
+              "source_lines": [
+                22
+              ],
+              "successors": [
+                "84",
+                "51"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "51",
+              "instructions": [
+                "%52 = icmp eq i64 %42, 0, !dbg !50",
+                "br i1 %52, label %55, label %53, !dbg !51"
+              ],
+              "source_lines": [
+                24
+              ],
+              "successors": [
+                "55",
+                "53"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "53",
+              "instructions": [
+                "%54 = icmp eq i64 %43, 0",
+                "br label %58, !dbg !51"
+              ],
+              "source_lines": [
+                24
+              ],
+              "successors": [
+                "58"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "55",
+              "instructions": [
+                "%56 = phi i64 [ -3750763034362895579, %51 ], [ %81, %72 ], !dbg !52",
+                "%57 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.3, i64 noundef %56), !dbg !53",
+                "br label %84"
+              ],
+              "source_lines": [
+                23,
+                28
+              ],
+              "successors": [
+                "84"
+              ],
+              "instruction_count": 3,
+              "reachable": true
+            },
+            {
+              "id": "58",
+              "instructions": [
+                "%59 = phi i64 [ 0, %53 ], [ %73, %72 ]",
+                "%60 = phi i64 [ -3750763034362895579, %53 ], [ %81, %72 ]",
+                "%61 = add i64 %59, %41, !dbg !54",
+                "br i1 %54, label %70, label %62, !dbg !55"
+              ],
+              "source_lines": [
+                25,
+                4
+              ],
+              "successors": [
+                "70",
+                "62"
+              ],
+              "instruction_count": 4,
+              "reachable": true
+            },
+            {
+              "id": "62",
+              "instructions": [
+                "%63 = phi i64 [ %68, %62 ], [ 0, %58 ]",
+                "%64 = phi i64 [ %67, %62 ], [ 0, %58 ]",
+                "%65 = xor i64 %63, %61, !dbg !57",
+                "%66 = and i64 %65, 1023, !dbg !58",
+                "%67 = add i64 %66, %64, !dbg !59",
+                "%68 = add nuw nsw i64 %63, 1, !dbg !60",
+                "%69 = icmp eq i64 %68, %43, !dbg !61",
+                "br i1 %69, label %70, label %62, !dbg !55, !llvm.loop !62"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                "70",
+                "62"
+              ],
+              "instruction_count": 8,
+              "reachable": true
+            },
+            {
+              "id": "70",
+              "instructions": [
+                "%71 = phi i64 [ 0, %58 ], [ %67, %62 ], !dbg !64",
+                "br label %75, !dbg !65"
+              ],
+              "source_lines": [
+                0,
+                26
+              ],
+              "successors": [
+                "75"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "72",
+              "instructions": [
+                "%73 = add nuw nsw i64 %59, 1, !dbg !66",
+                "%74 = icmp eq i64 %73, %42, !dbg !50",
+                "br i1 %74, label %55, label %58, !dbg !51, !llvm.loop !67"
+              ],
+              "source_lines": [
+                24
+              ],
+              "successors": [
+                "55",
+                "58"
+              ],
+              "instruction_count": 3,
+              "reachable": true
+            },
+            {
+              "id": "75",
+              "instructions": [
+                "%76 = phi i64 [ 0, %70 ], [ %82, %75 ]",
+                "%77 = phi i64 [ %60, %70 ], [ %81, %75 ]",
+                "%78 = lshr i64 %71, %76, !dbg !69",
+                "%79 = and i64 %78, 255, !dbg !70",
+                "%80 = xor i64 %79, %77, !dbg !71",
+                "%81 = mul i64 %80, 1099511628211, !dbg !72",
+                "%82 = add nuw nsw i64 %76, 8, !dbg !73",
+                "%83 = icmp samesign ult i64 %76, 56, !dbg !74",
+                "br i1 %83, label %75, label %72, !dbg !65, !llvm.loop !75"
+              ],
+              "source_lines": [
+                26
+              ],
+              "successors": [
+                "75",
+                "72"
+              ],
+              "instruction_count": 9,
+              "reachable": true
+            },
+            {
+              "id": "84",
+              "instructions": [
+                "%85 = phi i32 [ 0, %55 ], [ %44, %39 ], [ 2, %45 ], !dbg !46",
+                "ret i32 %85, !dbg !77"
+              ],
+              "source_lines": [
+                0,
+                30
+              ],
+              "successors": [],
+              "instruction_count": 2,
+              "reachable": true
+            }
+          ],
+          "edges": [
+            {
+              "from": "entry",
+              "to": "10",
+              "back_edge": false
+            },
+            {
+              "from": "entry",
+              "to": "39",
+              "back_edge": false
+            },
+            {
+              "from": "4",
+              "to": "10",
+              "back_edge": true
+            },
+            {
+              "from": "4",
+              "to": "37",
+              "back_edge": false
+            },
+            {
+              "from": "10",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "10",
+              "to": "24",
+              "back_edge": false
+            },
+            {
+              "from": "24",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "24",
+              "to": "27",
+              "back_edge": false
+            },
+            {
+              "from": "27",
+              "to": "30",
+              "back_edge": false
+            },
+            {
+              "from": "27",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "30",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "31",
+              "to": "4",
+              "back_edge": false
+            },
+            {
+              "from": "31",
+              "to": "37",
+              "back_edge": false
+            },
+            {
+              "from": "37",
+              "to": "39",
+              "back_edge": false
+            },
+            {
+              "from": "39",
+              "to": "84",
+              "back_edge": false
+            },
+            {
+              "from": "39",
+              "to": "45",
+              "back_edge": false
+            },
+            {
+              "from": "45",
+              "to": "84",
+              "back_edge": false
+            },
+            {
+              "from": "45",
+              "to": "51",
+              "back_edge": false
+            },
+            {
+              "from": "51",
+              "to": "55",
+              "back_edge": false
+            },
+            {
+              "from": "51",
+              "to": "53",
+              "back_edge": false
+            },
+            {
+              "from": "53",
+              "to": "58",
+              "back_edge": false
+            },
+            {
+              "from": "55",
+              "to": "84",
+              "back_edge": false
+            },
+            {
+              "from": "58",
+              "to": "70",
+              "back_edge": false
+            },
+            {
+              "from": "58",
+              "to": "62",
+              "back_edge": false
+            },
+            {
+              "from": "62",
+              "to": "70",
+              "back_edge": false
+            },
+            {
+              "from": "62",
+              "to": "62",
+              "back_edge": true
+            },
+            {
+              "from": "70",
+              "to": "75",
+              "back_edge": false
+            },
+            {
+              "from": "72",
+              "to": "55",
+              "back_edge": false
+            },
+            {
+              "from": "72",
+              "to": "58",
+              "back_edge": true
+            },
+            {
+              "from": "75",
+              "to": "75",
+              "back_edge": true
+            },
+            {
+              "from": "75",
+              "to": "72",
+              "back_edge": false
+            }
+          ]
+        }
+      ],
+      "provenance": "Parsed LLVM IR labels, terminators and debug locations",
+      "source_mapping": "Only emitted !DILocation records are used"
+    },
+    "after": {
+      "functions": [
+        {
+          "name": "kernel",
+          "blocks": [
+            {
+              "id": "entry",
+              "instructions": [
+                "%3 = icmp eq i64 %0, 0, !dbg !12",
+                "br i1 %3, label %4, label %.preheader, !dbg !13"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                "4",
+                ".preheader"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": ".preheader",
+              "instructions": [
+                "br label %6, !dbg !13"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                "6"
+              ],
+              "instruction_count": 1,
+              "reachable": true
+            },
+            {
+              "id": ".loopexit",
+              "instructions": [
+                "%.lcssa = phi i64 [ %11, %6 ], !dbg !14",
+                "br label %4, !dbg !15"
+              ],
+              "source_lines": [
+                4,
+                5
+              ],
+              "successors": [
+                "4"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "4",
+              "instructions": [
+                "%5 = phi i64 [ 0, %2 ], [ %.lcssa, %.loopexit ], !dbg !16",
+                "ret i64 %5, !dbg !15"
+              ],
+              "source_lines": [
+                0,
+                5
+              ],
+              "successors": [],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "6",
+              "instructions": [
+                "%7 = phi i64 [ %12, %6 ], [ 0, %.preheader ]",
+                "%8 = phi i64 [ %11, %6 ], [ 0, %.preheader ]",
+                "%9 = xor i64 %7, %1, !dbg !17",
+                "%10 = and i64 %9, 1023, !dbg !18",
+                "%11 = add i64 %10, %8, !dbg !14",
+                "%12 = add nuw i64 %7, 1, !dbg !19",
+                "%13 = icmp eq i64 %12, %0, !dbg !12",
+                "br i1 %13, label %.loopexit, label %6, !dbg !13, !llvm.loop !20"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                ".loopexit",
+                "6"
+              ],
+              "instruction_count": 8,
+              "reachable": true
+            }
+          ],
+          "edges": [
+            {
+              "from": "entry",
+              "to": "4",
+              "back_edge": false
+            },
+            {
+              "from": "entry",
+              "to": ".preheader",
+              "back_edge": false
+            },
+            {
+              "from": ".preheader",
+              "to": "6",
+              "back_edge": false
+            },
+            {
+              "from": ".loopexit",
+              "to": "4",
+              "back_edge": false
+            },
+            {
+              "from": "6",
+              "to": ".loopexit",
+              "back_edge": false
+            },
+            {
+              "from": "6",
+              "to": "6",
+              "back_edge": true
+            }
+          ]
+        },
+        {
+          "name": "main",
+          "blocks": [
+            {
+              "id": "entry",
+              "instructions": [
+                "%3 = icmp sgt i32 %0, 2, !dbg !25",
+                "br i1 %3, label %.preheader2, label %39, !dbg !26"
+              ],
+              "source_lines": [
+                15
+              ],
+              "successors": [
+                ".preheader2",
+                "39"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": ".preheader2",
+              "instructions": [
+                "br label %10, !dbg !26"
+              ],
+              "source_lines": [
+                15
+              ],
+              "successors": [
+                "10"
+              ],
+              "instruction_count": 1,
+              "reachable": true
+            },
+            {
+              "id": "4",
+              "instructions": [
+                "%5 = add nuw nsw i64 %11, 2, !dbg !27",
+                "%6 = trunc i64 %11 to i32, !dbg !25",
+                "%7 = add i32 %6, 3, !dbg !25",
+                "%8 = icmp slt i32 %7, %0, !dbg !25",
+                "%9 = add i64 %12, 2, !dbg !28",
+                "br i1 %8, label %10, label %37, !dbg !26, !llvm.loop !29"
+              ],
+              "source_lines": [
+                15
+              ],
+              "successors": [
+                "10",
+                "37"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "10",
+              "instructions": [
+                "%11 = phi i64 [ %5, %4 ], [ 1, %.preheader2 ]",
+                "%12 = phi i64 [ %9, %4 ], [ 2, %.preheader2 ]",
+                "%13 = phi i32 [ %36, %4 ], [ 0, %.preheader2 ]",
+                "%14 = phi i64 [ %35, %4 ], [ 1, %.preheader2 ]",
+                "%15 = phi i64 [ %33, %4 ], [ 1, %.preheader2 ]",
+                "%16 = phi i64 [ %32, %4 ], [ 0, %.preheader2 ]",
+                "%17 = getelementptr inbounds nuw ptr, ptr %1, i64 %12, !dbg !31",
+                "%18 = load ptr, ptr %17, align 8, !dbg !31, !tbaa !32",
+                "%19 = tail call i64 @strtoull(ptr noundef captures(none) %18, ptr noundef null, i32 noundef 10) #5, !dbg !37",
+                "%20 = getelementptr inbounds nuw ptr, ptr %1, i64 %11, !dbg !38",
+                "%21 = load ptr, ptr %20, align 8, !dbg !38, !tbaa !32",
+                "%22 = tail call i32 @strcmp(ptr noundef nonnull dereferenceable(1) %21, ptr noundef nonnull dereferenceable(7) @.str) #6, !dbg !39",
+                "%23 = icmp eq i32 %22, 0, !dbg !39",
+                "br i1 %23, label %31, label %24, !dbg !40"
+              ],
+              "source_lines": [
+                16,
+                17
+              ],
+              "successors": [
+                "31",
+                "24"
+              ],
+              "instruction_count": 14,
+              "reachable": true
+            },
+            {
+              "id": "24",
+              "instructions": [
+                "%25 = tail call i32 @strcmp(ptr noundef nonnull dereferenceable(1) %21, ptr noundef nonnull dereferenceable(7) @.str.1) #6, !dbg !41",
+                "%26 = icmp eq i32 %25, 0, !dbg !41",
+                "br i1 %26, label %31, label %27, !dbg !42"
+              ],
+              "source_lines": [
+                18
+              ],
+              "successors": [
+                "31",
+                "27"
+              ],
+              "instruction_count": 3,
+              "reachable": true
+            },
+            {
+              "id": "27",
+              "instructions": [
+                "%28 = tail call i32 @strcmp(ptr noundef nonnull dereferenceable(1) %21, ptr noundef nonnull dereferenceable(9) @.str.2) #6, !dbg !43",
+                "%29 = icmp eq i32 %28, 0, !dbg !43",
+                "br i1 %29, label %30, label %31, !dbg !44"
+              ],
+              "source_lines": [
+                19
+              ],
+              "successors": [
+                "30",
+                "31"
+              ],
+              "instruction_count": 3,
+              "reachable": true
+            },
+            {
+              "id": "30",
+              "instructions": [
+                "br label %31, !dbg !30"
+              ],
+              "source_lines": [
+                21
+              ],
+              "successors": [
+                "31"
+              ],
+              "instruction_count": 1,
+              "reachable": true
+            },
+            {
+              "id": "31",
+              "instructions": [
+                "%32 = phi i64 [ %16, %27 ], [ %16, %10 ], [ %19, %24 ], [ %16, %30 ], !dbg !45",
+                "%33 = phi i64 [ %15, %27 ], [ %15, %10 ], [ %15, %24 ], [ %19, %30 ], !dbg !46",
+                "%34 = phi i1 [ false, %27 ], [ true, %10 ], [ true, %24 ], [ true, %30 ]",
+                "%35 = phi i64 [ %14, %27 ], [ %19, %10 ], [ %14, %24 ], [ %14, %30 ], !dbg !47",
+                "%36 = phi i32 [ 2, %27 ], [ %13, %10 ], [ %13, %24 ], [ %13, %30 ]",
+                "br i1 %34, label %4, label %37"
+              ],
+              "source_lines": [
+                14,
+                0
+              ],
+              "successors": [
+                "4",
+                "37"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "37",
+              "instructions": [
+                "%.lcssa8 = phi i64 [ %32, %4 ], [ %32, %31 ], !dbg !45",
+                "%.lcssa7 = phi i64 [ %33, %4 ], [ %33, %31 ], !dbg !46",
+                "%.lcssa6 = phi i1 [ %34, %4 ], [ %34, %31 ]",
+                "%.lcssa5 = phi i64 [ %35, %4 ], [ %35, %31 ], !dbg !47",
+                "%.lcssa4 = phi i32 [ %36, %4 ], [ %36, %31 ]",
+                "%38 = xor i1 %.lcssa6, true",
+                "br label %39"
+              ],
+              "source_lines": [
+                14,
+                0
+              ],
+              "successors": [
+                "39"
+              ],
+              "instruction_count": 7,
+              "reachable": true
+            },
+            {
+              "id": "39",
+              "instructions": [
+                "%40 = phi i1 [ false, %2 ], [ %38, %37 ], !dbg !25",
+                "%41 = phi i64 [ 0, %2 ], [ %.lcssa8, %37 ], !dbg !45",
+                "%42 = phi i64 [ 1, %2 ], [ %.lcssa7, %37 ], !dbg !48",
+                "%43 = phi i64 [ 1, %2 ], [ %.lcssa5, %37 ], !dbg !47",
+                "%44 = phi i32 [ 0, %2 ], [ %.lcssa4, %37 ]",
+                "br i1 %40, label %84, label %45"
+              ],
+              "source_lines": [
+                15,
+                14
+              ],
+              "successors": [
+                "84",
+                "45"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "45",
+              "instructions": [
+                "%46 = add i64 %43, -16000001, !dbg !49",
+                "%47 = icmp ult i64 %46, -16000000, !dbg !49",
+                "%48 = add i64 %42, -101, !dbg !49",
+                "%49 = icmp ult i64 %48, -100, !dbg !49",
+                "%50 = select i1 %47, i1 true, i1 %49, !dbg !49",
+                "br i1 %50, label %84, label %51, !dbg !49"
+              ],
+              "source_lines": [
+                22
+              ],
+              "successors": [
+                "84",
+                "51"
+              ],
+              "instruction_count": 6,
+              "reachable": true
+            },
+            {
+              "id": "51",
+              "instructions": [
+                "%52 = icmp eq i64 %42, 0, !dbg !50",
+                "br i1 %52, label %55, label %53, !dbg !51"
+              ],
+              "source_lines": [
+                24
+              ],
+              "successors": [
+                "55",
+                "53"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "53",
+              "instructions": [
+                "%54 = icmp eq i64 %43, 0",
+                "br label %58, !dbg !51"
+              ],
+              "source_lines": [
+                24
+              ],
+              "successors": [
+                "58"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": ".loopexit1",
+              "instructions": [
+                "%.lcssa3.lcssa = phi i64 [ %.lcssa3, %72 ], !dbg !52",
+                "br label %55, !dbg !53"
+              ],
+              "source_lines": [
+                26,
+                28
+              ],
+              "successors": [
+                "55"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "55",
+              "instructions": [
+                "%56 = phi i64 [ -3750763034362895579, %51 ], [ %.lcssa3.lcssa, %.loopexit1 ], !dbg !54",
+                "%57 = tail call i32 (ptr, ...) @printf(ptr noundef nonnull dereferenceable(1) @.str.3, i64 noundef %56), !dbg !53",
+                "br label %84"
+              ],
+              "source_lines": [
+                23,
+                28
+              ],
+              "successors": [
+                "84"
+              ],
+              "instruction_count": 3,
+              "reachable": true
+            },
+            {
+              "id": "58",
+              "instructions": [
+                "%59 = phi i64 [ 0, %53 ], [ %73, %72 ]",
+                "%60 = phi i64 [ -3750763034362895579, %53 ], [ %.lcssa3, %72 ]",
+                "%61 = add i64 %59, %41, !dbg !55",
+                "br i1 %54, label %70, label %.preheader, !dbg !56"
+              ],
+              "source_lines": [
+                25,
+                4
+              ],
+              "successors": [
+                "70",
+                ".preheader"
+              ],
+              "instruction_count": 4,
+              "reachable": true
+            },
+            {
+              "id": ".preheader",
+              "instructions": [
+                "br label %62, !dbg !56"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                "62"
+              ],
+              "instruction_count": 1,
+              "reachable": true
+            },
+            {
+              "id": "62",
+              "instructions": [
+                "%63 = phi i64 [ %68, %62 ], [ 0, %.preheader ]",
+                "%64 = phi i64 [ %67, %62 ], [ 0, %.preheader ]",
+                "%65 = xor i64 %63, %61, !dbg !58",
+                "%66 = and i64 %65, 1023, !dbg !59",
+                "%67 = add i64 %66, %64, !dbg !60",
+                "%68 = add nuw nsw i64 %63, 1, !dbg !61",
+                "%69 = icmp eq i64 %68, %43, !dbg !62",
+                "br i1 %69, label %.loopexit, label %62, !dbg !56, !llvm.loop !63"
+              ],
+              "source_lines": [
+                4
+              ],
+              "successors": [
+                ".loopexit",
+                "62"
+              ],
+              "instruction_count": 8,
+              "reachable": true
+            },
+            {
+              "id": ".loopexit",
+              "instructions": [
+                "%.lcssa = phi i64 [ %67, %62 ], !dbg !60",
+                "br label %70, !dbg !65"
+              ],
+              "source_lines": [
+                4,
+                26
+              ],
+              "successors": [
+                "70"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "70",
+              "instructions": [
+                "%71 = phi i64 [ 0, %58 ], [ %.lcssa, %.loopexit ], !dbg !66",
+                "br label %75, !dbg !65"
+              ],
+              "source_lines": [
+                0,
+                26
+              ],
+              "successors": [
+                "75"
+              ],
+              "instruction_count": 2,
+              "reachable": true
+            },
+            {
+              "id": "72",
+              "instructions": [
+                "%.lcssa3 = phi i64 [ %81, %75 ], !dbg !52",
+                "%73 = add nuw nsw i64 %59, 1, !dbg !67",
+                "%74 = icmp eq i64 %73, %42, !dbg !50",
+                "br i1 %74, label %.loopexit1, label %58, !dbg !51, !llvm.loop !68"
+              ],
+              "source_lines": [
+                26,
+                24
+              ],
+              "successors": [
+                ".loopexit1",
+                "58"
+              ],
+              "instruction_count": 4,
+              "reachable": true
+            },
+            {
+              "id": "75",
+              "instructions": [
+                "%76 = phi i64 [ 0, %70 ], [ %82, %75 ]",
+                "%77 = phi i64 [ %60, %70 ], [ %81, %75 ]",
+                "%78 = lshr i64 %71, %76, !dbg !70",
+                "%79 = and i64 %78, 255, !dbg !71",
+                "%80 = xor i64 %79, %77, !dbg !72",
+                "%81 = mul i64 %80, 1099511628211, !dbg !52",
+                "%82 = add nuw nsw i64 %76, 8, !dbg !73",
+                "%83 = icmp samesign ult i64 %76, 56, !dbg !74",
+                "br i1 %83, label %75, label %72, !dbg !65, !llvm.loop !75"
+              ],
+              "source_lines": [
+                26
+              ],
+              "successors": [
+                "75",
+                "72"
+              ],
+              "instruction_count": 9,
+              "reachable": true
+            },
+            {
+              "id": "84",
+              "instructions": [
+                "%85 = phi i32 [ 0, %55 ], [ %44, %39 ], [ 2, %45 ], !dbg !46",
+                "ret i32 %85, !dbg !77"
+              ],
+              "source_lines": [
+                0,
+                30
+              ],
+              "successors": [],
+              "instruction_count": 2,
+              "reachable": true
+            }
+          ],
+          "edges": [
+            {
+              "from": "entry",
+              "to": ".preheader2",
+              "back_edge": false
+            },
+            {
+              "from": "entry",
+              "to": "39",
+              "back_edge": false
+            },
+            {
+              "from": ".preheader2",
+              "to": "10",
+              "back_edge": false
+            },
+            {
+              "from": "4",
+              "to": "10",
+              "back_edge": true
+            },
+            {
+              "from": "4",
+              "to": "37",
+              "back_edge": false
+            },
+            {
+              "from": "10",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "10",
+              "to": "24",
+              "back_edge": false
+            },
+            {
+              "from": "24",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "24",
+              "to": "27",
+              "back_edge": false
+            },
+            {
+              "from": "27",
+              "to": "30",
+              "back_edge": false
+            },
+            {
+              "from": "27",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "30",
+              "to": "31",
+              "back_edge": false
+            },
+            {
+              "from": "31",
+              "to": "4",
+              "back_edge": false
+            },
+            {
+              "from": "31",
+              "to": "37",
+              "back_edge": false
+            },
+            {
+              "from": "37",
+              "to": "39",
+              "back_edge": false
+            },
+            {
+              "from": "39",
+              "to": "84",
+              "back_edge": false
+            },
+            {
+              "from": "39",
+              "to": "45",
+              "back_edge": false
+            },
+            {
+              "from": "45",
+              "to": "84",
+              "back_edge": false
+            },
+            {
+              "from": "45",
+              "to": "51",
+              "back_edge": false
+            },
+            {
+              "from": "51",
+              "to": "55",
+              "back_edge": false
+            },
+            {
+              "from": "51",
+              "to": "53",
+              "back_edge": false
+            },
+            {
+              "from": "53",
+              "to": "58",
+              "back_edge": false
+            },
+            {
+              "from": ".loopexit1",
+              "to": "55",
+              "back_edge": false
+            },
+            {
+              "from": "55",
+              "to": "84",
+              "back_edge": false
+            },
+            {
+              "from": "58",
+              "to": "70",
+              "back_edge": false
+            },
+            {
+              "from": "58",
+              "to": ".preheader",
+              "back_edge": false
+            },
+            {
+              "from": ".preheader",
+              "to": "62",
+              "back_edge": false
+            },
+            {
+              "from": "62",
+              "to": ".loopexit",
+              "back_edge": false
+            },
+            {
+              "from": "62",
+              "to": "62",
+              "back_edge": true
+            },
+            {
+              "from": ".loopexit",
+              "to": "70",
+              "back_edge": false
+            },
+            {
+              "from": "70",
+              "to": "75",
+              "back_edge": false
+            },
+            {
+              "from": "72",
+              "to": ".loopexit1",
+              "back_edge": false
+            },
+            {
+              "from": "72",
+              "to": "58",
+              "back_edge": true
+            },
+            {
+              "from": "75",
+              "to": "75",
+              "back_edge": true
+            },
+            {
+              "from": "75",
+              "to": "72",
+              "back_edge": false
+            }
+          ]
+        }
+      ],
+      "provenance": "Parsed LLVM IR labels, terminators and debug locations",
+      "source_mapping": "Only emitted !DILocation records are used"
+    }
+  },
+  "objective": {
+    "selected": {
+      "id": "variant-9",
+      "actions": [
+        "loop-fusion"
+      ],
+      "status": "valid",
+      "correctness_passed": true,
+      "text_bytes": 804,
+      "median_ns": 1273685,
+      "compile_ms": 94.026968,
+      "executable_bytes": 17712,
+      "ir_changed": true,
+      "ir_instructions": 102,
+      "strategy": "random",
+      "ordinal": 2,
+      "action_ids": [
+        "loop-fusion"
+      ],
+      "search_median_ns": 1273685,
+      "samples_ns": [
+        1273685,
+        3366919,
+        1270640
+      ]
+    },
+    "frontier": [
+      {
+        "id": "variant-9",
+        "actions": [
+          "loop-fusion"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 1273685,
+        "compile_ms": 94.026968,
+        "executable_bytes": 17712,
+        "ir_changed": true,
+        "ir_instructions": 102,
+        "strategy": "random",
+        "ordinal": 2,
+        "action_ids": [
+          "loop-fusion"
+        ],
+        "search_median_ns": 1273685,
+        "samples_ns": [
+          1273685,
+          3366919,
+          1270640
+        ]
+      },
+      {
+        "id": "variant-3",
+        "actions": [
+          "instcombine"
+        ],
+        "status": "valid",
+        "correctness_passed": true,
+        "text_bytes": 804,
+        "median_ns": 1293165,
+        "compile_ms": 93.985325,
+        "executable_bytes": 17712,
+        "ir_changed": false,
+        "ir_instructions": 96,
+        "role": "remove:gvn",
+        "strategy": "adaptive",
+        "ordinal": 3,
+        "action_ids": [
+          "instcombine"
+        ],
+        "search_median_ns": 1293165,
+        "samples_ns": [
+          3351846,
+          1271792,
+          1293165
+        ]
+      }
+    ],
+    "feasible_count": 4,
+    "objective": "fastest",
+    "score_note": "Balanced minimizes the sum of runtime, text size and build cost normalized to feasible minima."
+  },
+  "validation": {
+    "differential": {
+      "guided": {
+        "status": "passed",
+        "cases": 12,
+        "oracle": "User-supplied reference compiled at -O0",
+        "scope": "Checks only the generated inputs; not a proof of universal equivalence"
+      },
+      "random": {
+        "status": "passed",
+        "cases": 12,
+        "oracle": "User-supplied reference compiled at -O0",
+        "scope": "Checks only the generated inputs; not a proof of universal equivalence"
+      },
+      "adaptive": {
+        "status": "passed",
+        "cases": 12,
+        "oracle": "User-supplied reference compiled at -O0",
+        "scope": "Checks only the generated inputs; not a proof of universal equivalence"
+      }
+    },
+    "sanitizers": {
+      "status": "passed",
+      "cases": 3,
+      "scope": "ASan/UBSan execution of the source build, separate from performance measurements"
+    },
+    "alive2": {
+      "status": "not_installed",
+      "scope": "Optional Alive2 integration; no formal validation claimed"
+    }
+  },
+  "limits": [
+    "Single-host exploratory measurements",
+    "Checks do not prove universal C equivalence",
+    "Alive2 is optional and may be unavailable",
+    "Trusted local custom execution is resource-limited, not a security sandbox"
+  ],
+  "commands": [
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-std=c17",
+        "-fno-lto",
+        "-fPIE",
+        "-march=x86-64",
+        "-O0",
+        "test-results/custom-review-work/reference.c",
+        "-o",
+        "test-results/custom-review-work/reference",
+        "-pie"
+      ],
+      "returncode": 0,
+      "duration_ns": 63598149,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-std=c17",
+        "-fno-lto",
+        "-fPIE",
+        "-march=x86-64",
+        "-O0",
+        "test-results/custom-review-work/source.c",
+        "-o",
+        "test-results/custom-review-work/o0",
+        "-pie"
+      ],
+      "returncode": 0,
+      "duration_ns": 63691640,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-std=c17",
+        "-fno-lto",
+        "-fPIE",
+        "-march=x86-64",
+        "-O3",
+        "test-results/custom-review-work/source.c",
+        "-o",
+        "test-results/custom-review-work/o3",
+        "-pie"
+      ],
+      "returncode": 0,
+      "duration_ns": 63706493,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-std=c17",
+        "-fno-lto",
+        "-fPIE",
+        "-march=x86-64",
+        "-O1",
+        "-gline-tables-only",
+        "-emit-llvm",
+        "-c",
+        "test-results/custom-review-work/source.c",
+        "-o",
+        "test-results/custom-review-work/initial.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 31596143,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-0/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-0/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15441003,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-0/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-0/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31537184,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(instcombine),function(gvn)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-1/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-1/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15432750,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-1/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-1/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15427212,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-1/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-1/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31533777,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(gvn)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-2/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-2/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15448448,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-2/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-2/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15436560,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-2/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-2/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31571515,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(instcombine)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-3/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-3/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15424522,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-3/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-3/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15416520,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-3/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-3/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31548140,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(gvn),function(instcombine)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-4/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-4/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15443250,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-4/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-4/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15425924,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-4/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-4/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31537544,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(loop-mssa(licm))",
+        "-pass-remarks-output=test-results/custom-review-work/variant-5/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-5/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15454097,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-5/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-5/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 31544005,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-5/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-5/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31591997,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(simplifycfg),function(loop-vectorize),function(loop-unroll)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-6/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-6/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15448197,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-6/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-6/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 31583104,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-6/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-6/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31569643,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(dce)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-7/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-7/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15415799,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-7/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-7/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15429880,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-7/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-7/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31546988,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(loop-unroll)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-8/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-8/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 32345856,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-8/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-8/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15448038,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-8/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-8/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31536303,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(loop-fusion)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-9/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-9/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15411903,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-9/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-9/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15449049,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-9/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-9/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31569873,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(loop-vectorize)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-10/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-10/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15431773,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-10/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-10/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 31536864,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-10/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-10/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31618327,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/opt",
+        "-verify-each",
+        "-passes=function(loop-mssa(licm)),function(loop-interchange)",
+        "-pass-remarks-output=test-results/custom-review-work/variant-11/remarks.yaml",
+        "-pass-remarks=.*",
+        "-pass-remarks-missed=.*",
+        "-pass-remarks-analysis=.*",
+        "test-results/custom-review-work/initial.bc",
+        "-o",
+        "test-results/custom-review-work/variant-11/candidate.bc"
+      ],
+      "returncode": 0,
+      "duration_ns": 15407646,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/llc",
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic",
+        "test-results/custom-review-work/variant-11/candidate.bc",
+        "-o",
+        "test-results/custom-review-work/variant-11/program.o"
+      ],
+      "returncode": 0,
+      "duration_ns": 15431733,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-pie",
+        "test-results/custom-review-work/variant-11/program.o",
+        "-o",
+        "test-results/custom-review-work/variant-11/program"
+      ],
+      "returncode": 0,
+      "duration_ns": 31530904,
+      "timed_out": false
+    },
+    {
+      "args": [
+        "/usr/lib/llvm-21/bin/clang",
+        "-std=c17",
+        "-fno-lto",
+        "-fPIE",
+        "-march=x86-64",
+        "-O1",
+        "-fsanitize=address,undefined",
+        "-fno-sanitize-recover=all",
+        "-fno-omit-frame-pointer",
+        "test-results/custom-review-work/source.c",
+        "-o",
+        "test-results/custom-review-work/sanitized",
+        "-pie"
+      ],
+      "returncode": 0,
+      "duration_ns": 163867603,
+      "timed_out": false
+    }
+  ]
+}

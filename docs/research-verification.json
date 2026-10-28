@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-28",
+  "implementation_commit": "8ca48dac8db8cba55d04ae491b20ec7267528d46",
+  "workflow_url": "https://github.com/tqtqt0707/Evidence-Guided-Compiler-Auto-Tuner/actions/runs/40743155929",
+  "python_tests_passed": 191,
+  "compiler_job": "success",
+  "browser_job": "success",
+  "fresh_evidence": [
+    "examples/research/review-evidence.json",
+    "examples/research/custom-evidence.json"
+  ],
+  "alive2": "not_installed",
+  "scope": "Short CI workloads validate execution and evidence handling; no general speedup or learning-superiority claim."
+}
