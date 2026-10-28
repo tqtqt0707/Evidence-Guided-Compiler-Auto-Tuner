@@ -1,0 +1,88 @@
+{
+  "items": [
+    {
+      "name": "pipeline-4m",
+      "benchmark_id": "pipeline",
+      "experiment_id": "c46d5e9c-5fb5-42d6-985a-46f6967dac64",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-8m",
+      "benchmark_id": "pipeline",
+      "experiment_id": "b3785df0-7b7b-4b3e-b3d8-c5d231bd56d2",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-12m",
+      "benchmark_id": "pipeline",
+      "experiment_id": "c8c50984-7636-4d37-8642-3b05081aea43",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-14m",
+      "benchmark_id": "pipeline",
+      "experiment_id": "518affac-2ee2-4d17-9edc-ba7ac820b813",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-16m",
+      "benchmark_id": "pipeline",
+      "experiment_id": "86990a88-a4e5-4d7a-b422-4ad5e6ecce7c",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-6m",
+      "benchmark_id": "pipeline",
+      "experiment_id": "6fde4f49-d35a-4687-aa61-1760631d8548",
+      "mode": "full"
+    },
+    {
+      "name": "skew-histogram-4m",
+      "benchmark_id": "skew_histogram",
+      "experiment_id": "476dad47-1ac2-4d85-81fe-db5377df2605",
+      "mode": "full"
+    },
+    {
+      "name": "skew-histogram-8m",
+      "benchmark_id": "skew_histogram",
+      "experiment_id": "015fc9fc-f7d9-4d8d-853d-87cbfff411a8",
+      "mode": "full"
+    },
+    {
+      "name": "skew-histogram-12m",
+      "benchmark_id": "skew_histogram",
+      "experiment_id": "5b3f9acb-8d9c-4504-a4a9-8b000d5425c4",
+      "mode": "full"
+    },
+    {
+      "name": "skew-histogram-16m",
+      "benchmark_id": "skew_histogram",
+      "experiment_id": "d757961a-a705-4558-81e2-1fe649d61ee2",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-8m-r24-s79",
+      "benchmark_id": "pipeline",
+      "experiment_id": "800cb964-c4d1-4c3a-964a-15b3425cdb56",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-10m-r24-s101",
+      "benchmark_id": "pipeline",
+      "experiment_id": "fb5b3a71-9d33-4659-8095-26f4917428dc",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-12m-r24-s79",
+      "benchmark_id": "pipeline",
+      "experiment_id": "86c8aa18-b6ec-4bd7-97b5-48960005fc0d",
+      "mode": "full"
+    },
+    {
+      "name": "pipeline-16m-r24-s101",
+      "benchmark_id": "pipeline",
+      "experiment_id": "d0db61ee-b520-4bc6-9a24-a263a5a3c7b6",
+      "mode": "full"
+    }
+  ]
+}

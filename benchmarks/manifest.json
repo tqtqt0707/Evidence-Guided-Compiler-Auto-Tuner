@@ -1,0 +1,57 @@
+{
+  "dot": {
+    "display_name": "Integer dot product",
+    "description": "A vector-friendly unsigned integer reduction.",
+    "source": "dot.c",
+    "size_min": 1,
+    "size_max": 16000000,
+    "quick_input": {"size": 2000000, "seed": 29, "repeat": 5},
+    "tuning_input": {"size": 16000000, "seed": 17, "repeat": 24},
+    "holdout_input": {"size": 15000000, "seed": 91, "repeat": 24},
+    "small_cases": [{"size": 1, "seed": 0, "repeat": 1}, {"size": 7, "seed": 11, "repeat": 2}]
+  },
+  "matmul": {
+    "display_name": "Integer matrix multiplication",
+    "description": "A row-major nested-loop matrix kernel.",
+    "source": "matmul.c",
+    "size_min": 1,
+    "size_max": 512,
+    "quick_input": {"size": 192, "seed": 29, "repeat": 3},
+    "tuning_input": {"size": 384, "seed": 17, "repeat": 12},
+    "holdout_input": {"size": 400, "seed": 91, "repeat": 12},
+    "small_cases": [{"size": 1, "seed": 0, "repeat": 1}, {"size": 4, "seed": 11, "repeat": 2}]
+  },
+  "pipeline": {
+    "display_name": "Two-stage array pipeline",
+    "description": "Adjacent producer and consumer loops with an intermediate array; tests loop fusion and memory traffic.",
+    "source": "pipeline.c",
+    "size_min": 1,
+    "size_max": 16000000,
+    "quick_input": {"size": 2000000, "seed": 29, "repeat": 4},
+    "tuning_input": {"size": 12000000, "seed": 17, "repeat": 12},
+    "holdout_input": {"size": 14000000, "seed": 91, "repeat": 12},
+    "small_cases": [{"size": 1, "seed": 0, "repeat": 1}, {"size": 7, "seed": 11, "repeat": 2}]
+  },
+  "histogram": {
+    "display_name": "Branch-heavy histogram",
+    "description": "A conditional transform with scattered memory updates.",
+    "source": "histogram.c",
+    "size_min": 1,
+    "size_max": 16000000,
+    "quick_input": {"size": 1000000, "seed": 29, "repeat": 4},
+    "tuning_input": {"size": 8000000, "seed": 17, "repeat": 10},
+    "holdout_input": {"size": 10000000, "seed": 91, "repeat": 10},
+    "small_cases": [{"size": 1, "seed": 0, "repeat": 1}, {"size": 7, "seed": 11, "repeat": 2}]
+  },
+  "skew_histogram": {
+    "display_name": "Skewed branch histogram",
+    "description": "Histogram with a heavily favored first branch and scattered bin updates.",
+    "source": "skew_histogram.c",
+    "size_min": 1,
+    "size_max": 16000000,
+    "quick_input": {"size": 1000000, "seed": 29, "repeat": 4},
+    "tuning_input": {"size": 8000000, "seed": 17, "repeat": 10},
+    "holdout_input": {"size": 10000000, "seed": 91, "repeat": 10},
+    "small_cases": [{"size": 1, "seed": 0, "repeat": 1}, {"size": 7, "seed": 11, "repeat": 2}]
+  }
+}

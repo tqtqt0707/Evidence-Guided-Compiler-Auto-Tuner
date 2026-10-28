@@ -1,0 +1,880 @@
+{
+  "schema_version": 1,
+  "experiment_id": "c46d5e9c-5fb5-42d6-985a-46f6967dac64",
+  "status": "completed",
+  "mode": "full",
+  "benchmark_id": "pipeline",
+  "request": {
+    "benchmark_id": "pipeline",
+    "mode": "full",
+    "tuning_input": {
+      "size": 4000000,
+      "seed": 17,
+      "repeat": 12
+    },
+    "holdout_input": {
+      "size": 5000000,
+      "seed": 1017,
+      "repeat": 12
+    },
+    "strategies": [
+      "guided",
+      "random"
+    ],
+    "budget_per_strategy": 20,
+    "max_sequence_length": 4,
+    "search_repetitions": 5,
+    "confirmation_rounds": 10,
+    "llm_mode": "off"
+  },
+  "environment": {
+    "paths": {
+      "clang": "/usr/lib/llvm-21/bin/clang",
+      "opt": "/usr/lib/llvm-21/bin/opt",
+      "llc": "/usr/lib/llvm-21/bin/llc",
+      "llvm_dis": "/usr/lib/llvm-21/bin/llvm-dis"
+    },
+    "versions": {
+      "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "opt": "Ubuntu LLVM version 21.1.8",
+      "llc": "Ubuntu LLVM version 21.1.8",
+      "llvm_dis": "Ubuntu LLVM version 21.1.8"
+    },
+    "target_triple": "x86_64-pc-linux-gnu",
+    "clang_flags": [
+      "-std=c17",
+      "-fno-lto",
+      "-fPIE",
+      "-march=x86-64"
+    ],
+    "llc_flags": [
+      "-O3",
+      "-filetype=obj",
+      "-mcpu=x86-64",
+      "-relocation-model=pic"
+    ],
+    "link_flags": [
+      "-pie"
+    ],
+    "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+    "platform": "Linux-6.6.87.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "kernel": "6.6.87.1-microsoft-standard-WSL2",
+    "cpu_model": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "wsl": true,
+    "libraries": {
+      "fastapi": "0.142.2",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.13.5",
+      "langgraph": "1.2.14"
+    },
+    "git_commit": "e0a704df0b1caf3e521d34957c8004141cb34936",
+    "git_dirty": true,
+    "source_root": "/mnt/c/Users/Manan Kulshrestha/OneDrive/Desktop/vit/compiler_design_project/Evidence-guided-compiler-auto-tuner",
+    "llm": {
+      "mode": "off",
+      "provider": null,
+      "model": null,
+      "reasoning_effort": null,
+      "max_output_tokens": 4096
+    },
+    "orchestrator": "plain",
+    "strategy_seeds": {
+      "guided": 120,
+      "random": 526
+    }
+  },
+  "catalog_hash": "dc485dccd12ff4cc993e6a4ecbc0cd0a2487092fc68d81a1e8eb40d8c7a45c8b",
+  "source_sha256": "c140a016fb577c121db5e0a0947cf6b5621ed57bd3bdfa557fc4585f76b5ab71",
+  "baseline_variants": {
+    "o0": {
+      "id": "342f5110-ac91-4791-97a9-97626cc9e48a",
+      "executable_bytes": 16464
+    },
+    "o3": {
+      "id": "7e3239a4-8c49-4b76-af92-830db435df1a",
+      "executable_bytes": 16368
+    },
+    "empty": {
+      "id": "b37b7e7f-0a61-4649-905d-2368a1cfebfe",
+      "executable_bytes": 16368
+    }
+  },
+  "winners": {
+    "guided": {
+      "id": "70712837-cd8c-4477-abac-7bddd1f13141",
+      "status": "valid",
+      "action_ids": [
+        "loop-unroll",
+        "dce",
+        "loop-fusion"
+      ],
+      "effective_pipeline": "function(loop-unroll),function(dce),function(loop-fusion)",
+      "search_median_ns": 64381713,
+      "executable_bytes": 16368,
+      "ir_instructions_before": 209,
+      "ir_instructions_after": 215
+    },
+    "random": {
+      "id": "5bb7cffc-01dd-4df1-9730-ff574cb2140c",
+      "status": "valid",
+      "action_ids": [
+        "loop-unroll",
+        "loop-interchange",
+        "slp-vectorizer",
+        "loop-fusion"
+      ],
+      "effective_pipeline": "function(loop-unroll),function(loop-interchange),function(slp-vectorizer),function(loop-fusion)",
+      "search_median_ns": 64325523,
+      "executable_bytes": 16368,
+      "ir_instructions_before": 209,
+      "ir_instructions_after": 215
+    }
+  },
+  "comparisons": {
+    "tuning": {
+      "variants": {
+        "o3": {
+          "median_ns": 114768304,
+          "mad_ns": 153386,
+          "samples_ns": [
+            114549886,
+            114706547,
+            114775447,
+            114544101,
+            114761161,
+            114600389,
+            114907162,
+            114986691,
+            114790532,
+            115112573
+          ],
+          "executable_bytes": 16368
+        },
+        "empty": {
+          "median_ns": 114935339,
+          "mad_ns": 94957,
+          "samples_ns": [
+            114763754,
+            114984269,
+            114794354,
+            114739346,
+            114660954,
+            115118433,
+            114971885,
+            114920856,
+            114957244,
+            114949822
+          ],
+          "executable_bytes": 16368
+        },
+        "guided": {
+          "median_ns": 64720211,
+          "mad_ns": 121594,
+          "samples_ns": [
+            114781389,
+            64601713,
+            64809055,
+            64756275,
+            64684148,
+            64546678,
+            64988954,
+            64844901,
+            64325093,
+            64641012
+          ],
+          "executable_bytes": 16368
+        },
+        "random": {
+          "median_ns": 64746484,
+          "mad_ns": 248797,
+          "samples_ns": [
+            64649404,
+            64749881,
+            64706882,
+            64225409,
+            64743087,
+            64542848,
+            65040443,
+            114850969,
+            114674325,
+            65774495
+          ],
+          "executable_bytes": 16368
+        }
+      },
+      "guided_vs_o3": {
+        "label": "win",
+        "comparator_median_ns": 114768304,
+        "candidate_median_ns": 64720211,
+        "comparator_mad_ns": 153386,
+        "candidate_mad_ns": 121594,
+        "speedup": 1.773299286678778,
+        "runtime_reduction_percent": 43.607939871621696,
+        "paired_wins": 9,
+        "paired_losses": 1,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": -231503
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 50104834
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 49966392
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 49787826
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 50077013
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": 50053711
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 49918208
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 50141790
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 50465439
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": 50471561
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "guided_vs_empty": {
+        "label": "win",
+        "comparator_median_ns": 114935339,
+        "candidate_median_ns": 64720211,
+        "comparator_mad_ns": 94957,
+        "candidate_mad_ns": 121594,
+        "speedup": 1.775880165162008,
+        "runtime_reduction_percent": 43.689894193464724,
+        "paired_wins": 9,
+        "paired_losses": 1,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": -17635
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 50382556
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 49985299
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 49983071
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 49976806
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": 50571755
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 49982931
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 50075955
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 50632151
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": 50308810
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "random_vs_o3": {
+        "label": "win",
+        "comparator_median_ns": 114768304,
+        "candidate_median_ns": 64746484,
+        "comparator_mad_ns": 153386,
+        "candidate_mad_ns": 248797,
+        "speedup": 1.7725797125910343,
+        "runtime_reduction_percent": 43.58504766263689,
+        "paired_wins": 10,
+        "paired_losses": 0,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": 49900482
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 49956666
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 50068565
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 50318692
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 50018074
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": 50057541
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 49866719
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 135722
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 116207
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": 49338078
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "random_vs_empty": {
+        "label": "win",
+        "comparator_median_ns": 114935339,
+        "candidate_median_ns": 64746484,
+        "comparator_mad_ns": 94957,
+        "candidate_mad_ns": 248797,
+        "speedup": 1.7751595437985481,
+        "runtime_reduction_percent": 43.66703525362204,
+        "paired_wins": 10,
+        "paired_losses": 0,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": 50114350
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 50234388
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 50087472
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 50513937
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 49917867
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": 50575585
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 49931442
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 69887
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 282919
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": 49175327
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "guided_vs_random": {
+        "label": "inconclusive",
+        "comparator_median_ns": 64746484,
+        "candidate_median_ns": 64720211,
+        "comparator_mad_ns": 248797,
+        "candidate_mad_ns": 121594,
+        "speedup": 1.0004059473786326,
+        "runtime_reduction_percent": 0.04057826522286523,
+        "paired_wins": 6,
+        "paired_losses": 4,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": -50131985
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 148168
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": -102173
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": -530866
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 58939
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": -3830
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 51489
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 50006068
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 50349232
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": 1133483
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      }
+    },
+    "holdout": {
+      "variants": {
+        "o3": {
+          "median_ns": 140079496,
+          "mad_ns": 25049401,
+          "samples_ns": [
+            165634450,
+            164972742,
+            165119274,
+            165071068,
+            115186250,
+            115112084,
+            114999204,
+            114894088,
+            165138521,
+            114681432
+          ],
+          "executable_bytes": 16368
+        },
+        "empty": {
+          "median_ns": 164927021,
+          "mad_ns": 153685,
+          "samples_ns": [
+            165005119,
+            164613580,
+            164917556,
+            165060192,
+            165007150,
+            114809946,
+            114969729,
+            165101220,
+            164936486,
+            114784585
+          ],
+          "executable_bytes": 16368
+        },
+        "guided": {
+          "median_ns": 114942219,
+          "mad_ns": 50134,
+          "samples_ns": [
+            114881062,
+            114981331,
+            114792335,
+            114969531,
+            115205356,
+            114823397,
+            114919297,
+            114930641,
+            114953798,
+            115476361
+          ],
+          "executable_bytes": 16368
+        },
+        "random": {
+          "median_ns": 114785749,
+          "mad_ns": 89592,
+          "samples_ns": [
+            114649434,
+            114729462,
+            114808278,
+            114947575,
+            114703929,
+            114883113,
+            116041940,
+            115000416,
+            114763221,
+            114707583
+          ],
+          "executable_bytes": 16368
+        }
+      },
+      "guided_vs_o3": {
+        "label": "inconclusive",
+        "comparator_median_ns": 140079496,
+        "candidate_median_ns": 114942219,
+        "comparator_mad_ns": 25049401,
+        "candidate_mad_ns": 50134,
+        "speedup": 1.218694899217145,
+        "runtime_reduction_percent": 17.9450081687901,
+        "paired_wins": 7,
+        "paired_losses": 3,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": 50753388
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 49991411
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 50326939
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 50101537
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": -19106
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": 288687
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 79907
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": -36553
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 50184723
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": -794929
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "guided_vs_empty": {
+        "label": "win",
+        "comparator_median_ns": 164927021,
+        "candidate_median_ns": 114942219,
+        "comparator_mad_ns": 153685,
+        "candidate_mad_ns": 50134,
+        "speedup": 1.4348689492413575,
+        "runtime_reduction_percent": 30.307224187357388,
+        "paired_wins": 8,
+        "paired_losses": 2,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": 50124057
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 49632249
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 50125221
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 50090661
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 49801794
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": -13451
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 50432
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 50170579
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 49982688
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": -691776
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "random_vs_o3": {
+        "label": "inconclusive",
+        "comparator_median_ns": 140079496,
+        "candidate_median_ns": 114785749,
+        "comparator_mad_ns": 25049401,
+        "candidate_mad_ns": 89592,
+        "speedup": 1.2203561611119513,
+        "runtime_reduction_percent": 18.05670902756532,
+        "paired_wins": 7,
+        "paired_losses": 3,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": 50985016
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 50243280
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 50310996
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 50123493
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 482321
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": 228971
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": -1042736
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": -106328
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 50375300
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": -26151
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "random_vs_empty": {
+        "label": "win",
+        "comparator_median_ns": 164927021,
+        "candidate_median_ns": 114785749,
+        "comparator_mad_ns": 153685,
+        "candidate_mad_ns": 89592,
+        "speedup": 1.4368248884275696,
+        "runtime_reduction_percent": 30.402096452102896,
+        "paired_wins": 8,
+        "paired_losses": 2,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": 50355685
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": 49884118
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 50109278
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": 50112617
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": 50303221
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": -73167
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": -1072211
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 50100804
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": 50173265
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": 77002
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      },
+      "guided_vs_random": {
+        "label": "inconclusive",
+        "comparator_median_ns": 114785749,
+        "candidate_median_ns": 114942219,
+        "comparator_mad_ns": 89592,
+        "candidate_mad_ns": 50134,
+        "speedup": 0.9986387073317247,
+        "runtime_reduction_percent": -0.13631483120783575,
+        "paired_wins": 4,
+        "paired_losses": 6,
+        "paired_rounds": 10,
+        "paired_differences_ns": [
+          {
+            "round": 0,
+            "comparator_minus_candidate_ns": -231628
+          },
+          {
+            "round": 1,
+            "comparator_minus_candidate_ns": -251869
+          },
+          {
+            "round": 2,
+            "comparator_minus_candidate_ns": 15943
+          },
+          {
+            "round": 3,
+            "comparator_minus_candidate_ns": -21956
+          },
+          {
+            "round": 4,
+            "comparator_minus_candidate_ns": -501427
+          },
+          {
+            "round": 5,
+            "comparator_minus_candidate_ns": 59716
+          },
+          {
+            "round": 6,
+            "comparator_minus_candidate_ns": 1122643
+          },
+          {
+            "round": 7,
+            "comparator_minus_candidate_ns": 69775
+          },
+          {
+            "round": 8,
+            "comparator_minus_candidate_ns": -190577
+          },
+          {
+            "round": 9,
+            "comparator_minus_candidate_ns": -768778
+          }
+        ],
+        "size_delta_bytes": 0,
+        "size_delta_percent": 0.0
+      }
+    }
+  },
+  "failure_counts": {
+    "no_ir_change": 10
+  },
+  "trial_count": 40,
+  "sample_count": 370,
+  "interpretation": "Exploratory single-machine observations; quick mode is demo-only and has no held-out claim.",
+  "search_outcomes": {
+    "guided": {
+      "attempted": 20,
+      "budget": 20,
+      "exhausted": false
+    },
+    "random": {
+      "attempted": 20,
+      "budget": 20,
+      "exhausted": false
+    }
+  },
+  "artifacts": [
+    "summary.json",
+    "trials.csv",
+    "samples.csv",
+    "environment.json",
+    "search.svg",
+    "pareto.svg"
+  ],
+  "explanations": [
+    "tuning: guided versus Clang -O3: win; runtime reduction +43.61%, faster in 9/10 paired rounds.",
+    "tuning: guided versus empty-action control: win; runtime reduction +43.69%, faster in 9/10 paired rounds.",
+    "tuning: random versus Clang -O3: win; runtime reduction +43.59%, faster in 10/10 paired rounds.",
+    "tuning: random versus empty-action control: win; runtime reduction +43.67%, faster in 10/10 paired rounds.",
+    "tuning: guided versus random: inconclusive; runtime reduction +0.04%, faster in 6/10 paired rounds.",
+    "holdout: guided versus Clang -O3: inconclusive; runtime reduction +17.95%, faster in 7/10 paired rounds.",
+    "holdout: guided versus empty-action control: win; runtime reduction +30.31%, faster in 8/10 paired rounds.",
+    "holdout: random versus Clang -O3: inconclusive; runtime reduction +18.06%, faster in 7/10 paired rounds.",
+    "holdout: random versus empty-action control: win; runtime reduction +30.40%, faster in 8/10 paired rounds.",
+    "holdout: guided versus random: inconclusive; runtime reduction -0.14%, faster in 4/10 paired rounds.",
+    "The tuning win for guided versus o3 did not reproduce on holdout; it is workload-specific.",
+    "The tuning win for random versus o3 did not reproduce on holdout; it is workload-specific.",
+    "These are observations on this machine and these inputs. IR instruction changes do not establish a runtime improvement."
+  ]
+}

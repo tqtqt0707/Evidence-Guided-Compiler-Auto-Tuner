@@ -1,0 +1,6 @@
+recursive-include benchmarks *.c *.json
+recursive-include web *.html *.js *.css
+recursive-include examples *.json *.csv *.svg
+include constraints.txt
+include .env.example
+exclude .env

@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "name": "full-dot",
+      "benchmark_id": "dot",
+      "experiment_id": "f7deb708-1cbc-437f-852c-be2e1754d1f4",
+      "mode": "full"
+    },
+    {
+      "name": "full-matmul",
+      "benchmark_id": "matmul",
+      "experiment_id": "f55e18ca-41e9-49f2-95f7-11ff55da7479",
+      "mode": "full"
+    },
+    {
+      "name": "full-histogram",
+      "benchmark_id": "histogram",
+      "experiment_id": "be8ac06f-c758-492d-9474-5cfd22c62ac9",
+      "mode": "full"
+    }
+  ]
+}

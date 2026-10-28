@@ -1,0 +1,181 @@
+{
+  "collected_at": "2026-10-07T18:38:26.939609Z",
+  "environment": {
+    "paths": {
+      "clang": "/usr/lib/llvm-21/bin/clang",
+      "opt": "/usr/lib/llvm-21/bin/opt",
+      "llc": "/usr/lib/llvm-21/bin/llc",
+      "llvm_dis": "/usr/lib/llvm-21/bin/llvm-dis"
+    },
+    "versions": {
+      "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "opt": "Ubuntu LLVM version 21.1.8",
+      "llc": "Ubuntu LLVM version 21.1.8",
+      "llvm_dis": "Ubuntu LLVM version 21.1.8"
+    },
+    "target_triple": "x86_64-pc-linux-gnu",
+    "clang_flags": [
+      "-std=c17",
+      "-fno-lto",
+      "-fPIE",
+      "-march=x86-64"
+    ],
+    "llc_flags": [
+      "-O3",
+      "-filetype=obj",
+      "-mcpu=x86-64",
+      "-relocation-model=pic"
+    ],
+    "link_flags": [
+      "-pie"
+    ],
+    "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+    "platform": "Linux-6.6.87.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "kernel": "6.6.87.1-microsoft-standard-WSL2",
+    "cpu_model": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "wsl": true
+  },
+  "benchmarks": {
+    "dot": {
+      "source_sha256": "ef0c6c220be527940ddf30884dceb3222daa67976e2b312a73965d32f0ce7e62",
+      "cases": {
+        "quick_input": {
+          "workload": {
+            "size": 2000000,
+            "seed": 29,
+            "repeat": 5
+          },
+          "samples_ns": [
+            65110814,
+            115223778,
+            32746853
+          ],
+          "median_ns": 65110814,
+          "mad_ns": 32363961
+        },
+        "tuning_input": {
+          "workload": {
+            "size": 16000000,
+            "seed": 17,
+            "repeat": 24
+          },
+          "samples_ns": [
+            667288830,
+            1068852697,
+            416064219
+          ],
+          "median_ns": 667288830,
+          "mad_ns": 251224611
+        },
+        "holdout_input": {
+          "workload": {
+            "size": 15000000,
+            "seed": 91,
+            "repeat": 24
+          },
+          "samples_ns": [
+            315637438,
+            315415778,
+            316329369
+          ],
+          "median_ns": 315637438,
+          "mad_ns": 221660
+        }
+      }
+    },
+    "matmul": {
+      "source_sha256": "d08429a2750ec4ef8bebb86bc51ae9209bb0d1024753c7531d93d71a8734ee59",
+      "cases": {
+        "quick_input": {
+          "workload": {
+            "size": 192,
+            "seed": 29,
+            "repeat": 3
+          },
+          "samples_ns": [
+            16150292,
+            15922737,
+            7872497
+          ],
+          "median_ns": 15922737,
+          "mad_ns": 227555
+        },
+        "tuning_input": {
+          "workload": {
+            "size": 384,
+            "seed": 17,
+            "repeat": 12
+          },
+          "samples_ns": [
+            415555001,
+            415352280,
+            415213063
+          ],
+          "median_ns": 415352280,
+          "mad_ns": 139217
+        },
+        "holdout_input": {
+          "workload": {
+            "size": 400,
+            "seed": 91,
+            "repeat": 12
+          },
+          "samples_ns": [
+            264989742,
+            264923215,
+            265109408
+          ],
+          "median_ns": 264989742,
+          "mad_ns": 66527
+        }
+      }
+    },
+    "histogram": {
+      "source_sha256": "2c06c34c1209424f314ed7743e5e46fef53bc2010dc9a7bc6ed00a0b1b6e5107",
+      "cases": {
+        "quick_input": {
+          "workload": {
+            "size": 1000000,
+            "seed": 29,
+            "repeat": 4
+          },
+          "samples_ns": [
+            32202845,
+            32035797,
+            32171535
+          ],
+          "median_ns": 32171535,
+          "mad_ns": 31310
+        },
+        "tuning_input": {
+          "workload": {
+            "size": 8000000,
+            "seed": 17,
+            "repeat": 10
+          },
+          "samples_ns": [
+            415643031,
+            415474166,
+            415713996
+          ],
+          "median_ns": 415643031,
+          "mad_ns": 70965
+        },
+        "holdout_input": {
+          "workload": {
+            "size": 10000000,
+            "seed": 91,
+            "repeat": 10
+          },
+          "samples_ns": [
+            516124827,
+            516010189,
+            516228231
+          ],
+          "median_ns": 516124827,
+          "mad_ns": 103404
+        }
+      }
+    }
+  }
+}

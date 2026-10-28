@@ -1,0 +1,38 @@
+name: Verify tuner
+on: [push, pull_request]
+jobs:
+  compiler:
+    runs-on: ubuntu-latest
+    container: ubuntu:26.04
+    steps:
+      - name: Install LLVM and Python
+        run: apt-get update && apt-get install -y git clang-21 llvm-21 python3-venv
+      - uses: actions/checkout@v4
+      - name: Install project
+        run: |
+          python3 -m venv /tmp/tuner-venv
+          /tmp/tuner-venv/bin/pip install -c constraints.txt -e '.[web,test,graph]'
+      - name: Verify compiler and regressions
+        run: |
+          /tmp/tuner-venv/bin/python -m autotuner doctor
+          /tmp/tuner-venv/bin/python -m coverage run -m pytest -q
+          /tmp/tuner-venv/bin/python -m coverage report
+      - name: Verify wheel resource inclusion
+        run: /tmp/tuner-venv/bin/python scripts/check_package.py
+  browser:
+    runs-on: ubuntu-latest
+    container: ubuntu:26.04
+    steps:
+      - name: Install compiler, Python, and Node
+        run: apt-get update && apt-get install -y git clang-21 llvm-21 python3-venv nodejs npm
+      - uses: actions/checkout@v4
+      - name: Install real application dependencies
+        run: |
+          python3 -m venv /tmp/tuner-web
+          /tmp/tuner-web/bin/pip install -c constraints.txt -e '.[web,test]'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm run test:live
+        env:
+          AUTOTUNER_TEST_PYTHON: /tmp/tuner-web/bin/python

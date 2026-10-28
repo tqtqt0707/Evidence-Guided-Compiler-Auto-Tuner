@@ -1,0 +1,122 @@
+{
+  "collected_at": "2026-10-16T13:39:54.322819+00:00",
+  "environment": {
+    "paths": {
+      "clang": "/usr/lib/llvm-21/bin/clang",
+      "opt": "/usr/lib/llvm-21/bin/opt",
+      "llc": "/usr/lib/llvm-21/bin/llc",
+      "llvm_dis": "/usr/lib/llvm-21/bin/llvm-dis"
+    },
+    "versions": {
+      "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+      "opt": "Ubuntu LLVM version 21.1.8",
+      "llc": "Ubuntu LLVM version 21.1.8",
+      "llvm_dis": "Ubuntu LLVM version 21.1.8"
+    },
+    "target_triple": "x86_64-pc-linux-gnu",
+    "clang_flags": [
+      "-std=c17",
+      "-fno-lto",
+      "-fPIE",
+      "-march=x86-64"
+    ],
+    "llc_flags": [
+      "-O3",
+      "-filetype=obj",
+      "-mcpu=x86-64",
+      "-relocation-model=pic"
+    ],
+    "link_flags": [
+      "-pie"
+    ],
+    "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+    "platform": "Linux-6.6.87.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+    "kernel": "6.6.87.1-microsoft-standard-WSL2",
+    "cpu_model": "13th Gen Intel(R) Core(TM) i7-13650HX",
+    "wsl": true,
+    "libraries": {
+      "fastapi": "0.142.2",
+      "uvicorn": "0.54.0",
+      "pydantic": "2.13.5",
+      "langgraph": "1.2.14"
+    },
+    "git_commit": null,
+    "git_dirty": true,
+    "source_root": "/mnt/c/Users/Manan Kulshrestha/OneDrive/Desktop/vit/compiler_design_project/Evidence-guided-compiler-auto-tuner"
+  },
+  "runs": [
+    {
+      "benchmark": "dot",
+      "mode": "quick",
+      "default_workload": true,
+      "seconds": 2.357,
+      "status": "completed",
+      "trials": 5,
+      "label": "demo_only"
+    },
+    {
+      "benchmark": "matmul",
+      "mode": "quick",
+      "default_workload": true,
+      "seconds": 2.38,
+      "status": "completed",
+      "trials": 5,
+      "label": "demo_only"
+    },
+    {
+      "benchmark": "histogram",
+      "mode": "quick",
+      "default_workload": true,
+      "seconds": 2.994,
+      "status": "completed",
+      "trials": 5,
+      "label": "demo_only"
+    },
+    {
+      "benchmark": "dot",
+      "mode": "full",
+      "default_workload": false,
+      "seconds": 1.758,
+      "status": "completed",
+      "trials": 4,
+      "holdout_rounds": 10
+    },
+    {
+      "benchmark": "matmul",
+      "mode": "full",
+      "default_workload": false,
+      "seconds": 1.783,
+      "status": "completed",
+      "trials": 4,
+      "holdout_rounds": 10
+    },
+    {
+      "benchmark": "histogram",
+      "mode": "full",
+      "default_workload": false,
+      "seconds": 1.785,
+      "status": "completed",
+      "trials": 4,
+      "holdout_rounds": 10
+    }
+  ],
+  "graph": {
+    "status": "completed",
+    "trials": 2
+  },
+  "verification_scope": "Quick timings follow a ready preflight and include experiment creation/execution. Small-input full runs validate integration only. Their temporary data was discarded; original scientific bundles are unchanged.",
+  "checks": {
+    "python_tests": 31,
+    "browser_tests": 6,
+    "browser_api": "intercepted fixtures; no listening server",
+    "installed_wheel": {
+      "resource_root": "/tmp/installed-tuner-check-nvqoi2wz/autotuner/resources",
+      "actions": 8,
+      "bundles": 3,
+      "run_status": "completed",
+      "business_routes": 12
+    },
+    "hosted_ci": "configured, not run",
+    "presentation": "ten slides; exported package/layout/import validation passed; reviewed slide renders"
+  }
+}

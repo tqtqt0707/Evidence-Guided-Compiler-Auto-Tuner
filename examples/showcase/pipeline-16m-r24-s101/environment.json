@@ -1,0 +1,56 @@
+{
+  "paths": {
+    "clang": "/usr/lib/llvm-21/bin/clang",
+    "opt": "/usr/lib/llvm-21/bin/opt",
+    "llc": "/usr/lib/llvm-21/bin/llc",
+    "llvm_dis": "/usr/lib/llvm-21/bin/llvm-dis"
+  },
+  "versions": {
+    "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+    "opt": "Ubuntu LLVM version 21.1.8",
+    "llc": "Ubuntu LLVM version 21.1.8",
+    "llvm_dis": "Ubuntu LLVM version 21.1.8"
+  },
+  "target_triple": "x86_64-pc-linux-gnu",
+  "clang_flags": [
+    "-std=c17",
+    "-fno-lto",
+    "-fPIE",
+    "-march=x86-64"
+  ],
+  "llc_flags": [
+    "-O3",
+    "-filetype=obj",
+    "-mcpu=x86-64",
+    "-relocation-model=pic"
+  ],
+  "link_flags": [
+    "-pie"
+  ],
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "platform": "Linux-6.6.87.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "kernel": "6.6.87.1-microsoft-standard-WSL2",
+  "cpu_model": "13th Gen Intel(R) Core(TM) i7-13650HX",
+  "wsl": true,
+  "libraries": {
+    "fastapi": "0.142.2",
+    "uvicorn": "0.54.0",
+    "pydantic": "2.13.5",
+    "langgraph": "1.2.14"
+  },
+  "git_commit": "e0a704df0b1caf3e521d34957c8004141cb34936",
+  "git_dirty": true,
+  "source_root": "/mnt/c/Users/Manan Kulshrestha/OneDrive/Desktop/vit/compiler_design_project/Evidence-guided-compiler-auto-tuner",
+  "llm": {
+    "mode": "off",
+    "provider": null,
+    "model": null,
+    "reasoning_effort": null,
+    "max_output_tokens": 4096
+  },
+  "orchestrator": "plain",
+  "strategy_seeds": {
+    "guided": 204,
+    "random": 610
+  }
+}

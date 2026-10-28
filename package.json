@@ -1,0 +1,6 @@
+{
+  "name": "autotuner-browser-checks",
+  "private": true,
+  "scripts": { "test": "node --test tests/browser.test.cjs", "test:live": "node --test tests/live_browser.test.cjs" },
+  "devDependencies": { "playwright": "1.62.1" }
+}

@@ -1,0 +1,4985 @@
+{
+  "summary": {
+    "schema_version": 1,
+    "experiment_id": "f7deb708-1cbc-437f-852c-be2e1754d1f4",
+    "status": "completed",
+    "mode": "full",
+    "benchmark_id": "dot",
+    "request": {
+      "benchmark_id": "dot",
+      "mode": "full",
+      "tuning_input": {
+        "size": 16000000,
+        "seed": 17,
+        "repeat": 24
+      },
+      "holdout_input": {
+        "size": 15000000,
+        "seed": 91,
+        "repeat": 24
+      },
+      "strategies": [
+        "guided",
+        "random"
+      ],
+      "budget_per_strategy": 20,
+      "max_sequence_length": 4,
+      "search_repetitions": 5,
+      "confirmation_rounds": 10,
+      "llm_mode": "off"
+    },
+    "environment": {
+      "paths": {
+        "clang": "/usr/lib/llvm-21/bin/clang",
+        "opt": "/usr/lib/llvm-21/bin/opt",
+        "llc": "/usr/lib/llvm-21/bin/llc",
+        "llvm_dis": "/usr/lib/llvm-21/bin/llvm-dis"
+      },
+      "versions": {
+        "clang": "Ubuntu clang version 21.1.8 (6ubuntu1)",
+        "opt": "Ubuntu LLVM version 21.1.8",
+        "llc": "Ubuntu LLVM version 21.1.8",
+        "llvm_dis": "Ubuntu LLVM version 21.1.8"
+      },
+      "target_triple": "x86_64-pc-linux-gnu",
+      "clang_flags": [
+        "-std=c17",
+        "-fno-lto",
+        "-fPIE",
+        "-march=x86-64"
+      ],
+      "llc_flags": [
+        "-O3",
+        "-filetype=obj",
+        "-mcpu=x86-64",
+        "-relocation-model=pic"
+      ],
+      "link_flags": [
+        "-pie"
+      ],
+      "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+      "platform": "Linux-6.6.87.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+      "kernel": "6.6.87.1-microsoft-standard-WSL2",
+      "cpu_model": "13th Gen Intel(R) Core(TM) i7-13650HX",
+      "wsl": true
+    },
+    "catalog_hash": "62a0f5551b1b04fb232e01c9bc77e7e22734f3b2e5a98ca35b644a9f7e3a12f8",
+    "source_sha256": "ef0c6c220be527940ddf30884dceb3222daa67976e2b312a73965d32f0ce7e62",
+    "baseline_variants": {
+      "o0": {
+        "id": "34f8848c-d110-4a1c-93e4-82b0f2790feb",
+        "executable_bytes": 16456
+      },
+      "o3": {
+        "id": "514da828-0dfc-4d7f-8c12-92fe60bfa38d",
+        "executable_bytes": 16360
+      },
+      "empty": {
+        "id": "08c7826f-4670-4511-85e7-a434bf0b4b21",
+        "executable_bytes": 16360
+      }
+    },
+    "winners": {
+      "guided": {
+        "id": "0ab9ec83-f4f1-48af-86b1-e5cbb9172a87",
+        "status": "valid",
+        "action_ids": [
+          "licm",
+          "loop-vectorize"
+        ],
+        "effective_pipeline": "function(loop-mssa(licm)),function(loop-vectorize)",
+        "search_median_ns": 265144726,
+        "executable_bytes": 16360
+      },
+      "random": {
+        "id": "5f2332e1-bca5-4eff-89e0-cea7ee0d0a3c",
+        "status": "valid",
+        "action_ids": [
+          "instcombine",
+          "simplifycfg",
+          "loop-unroll"
+        ],
+        "effective_pipeline": "function(instcombine),function(simplifycfg),function(loop-unroll)",
+        "search_median_ns": 265182454,
+        "executable_bytes": 16360
+      }
+    },
+    "comparisons": {
+      "tuning": {
+        "guided_vs_o3": {
+          "label": "inconclusive",
+          "comparator_median_ns": 265052985,
+          "candidate_median_ns": 265235899,
+          "comparator_mad_ns": 303981,
+          "candidate_mad_ns": 453843,
+          "speedup": 0.999310372386658,
+          "runtime_reduction_percent": -0.06901035277908679,
+          "paired_wins": 5,
+          "paired_losses": 5,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": 823851
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": -50317870
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": -288042
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": 202680
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": 50118191
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": 50091560
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": -49840730
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": -653003
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": -904325
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 276565
+            }
+          ]
+        },
+        "guided_vs_empty": {
+          "label": "inconclusive",
+          "comparator_median_ns": 265479090,
+          "candidate_median_ns": 265235899,
+          "comparator_mad_ns": 295689,
+          "candidate_mad_ns": 453843,
+          "speedup": 1.0009168856889918,
+          "runtime_reduction_percent": 0.09160457797260041,
+          "paired_wins": 9,
+          "paired_losses": 1,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": 359522
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": 230592
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": 377923
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": 51074963
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": 50393430
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": 50200450
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": 249509
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": -277587
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": 43183
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 383245
+            }
+          ]
+        },
+        "random_vs_o3": {
+          "label": "inconclusive",
+          "comparator_median_ns": 265052985,
+          "candidate_median_ns": 265380732,
+          "comparator_mad_ns": 303981,
+          "candidate_mad_ns": 283676,
+          "speedup": 0.9987649932324401,
+          "runtime_reduction_percent": -0.12365338952888985,
+          "paired_wins": 3,
+          "paired_losses": 7,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": 229467
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": -100229667
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": 220852
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": -50376568
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": -285033
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": 209192
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": -49748382
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": -49825
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": -511307
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": -107541
+            }
+          ]
+        },
+        "random_vs_empty": {
+          "label": "inconclusive",
+          "comparator_median_ns": 265479090,
+          "candidate_median_ns": 265380732,
+          "comparator_mad_ns": 295689,
+          "candidate_mad_ns": 283676,
+          "speedup": 1.0003706297712676,
+          "runtime_reduction_percent": 0.03704924557335194,
+          "paired_wins": 6,
+          "paired_losses": 4,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": -234862
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": -49681205
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": 886817
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": 495715
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": -9794
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": 318082
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": 341857
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": 325591
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": 436201
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": -861
+            }
+          ]
+        },
+        "guided_vs_random": {
+          "label": "inconclusive",
+          "comparator_median_ns": 265380732,
+          "candidate_median_ns": 265235899,
+          "comparator_mad_ns": 283676,
+          "candidate_mad_ns": 453843,
+          "speedup": 1.0005460535340278,
+          "runtime_reduction_percent": 0.05457555222961703,
+          "paired_wins": 6,
+          "paired_losses": 4,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": 594384
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": 49911797
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": -508894
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": 50579248
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": 50403224
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": 49882368
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": -92348
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": -603178
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": -393018
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 384106
+            }
+          ]
+        }
+      },
+      "holdout": {
+        "guided_vs_o3": {
+          "label": "inconclusive",
+          "comparator_median_ns": 215664056,
+          "candidate_median_ns": 215072607,
+          "comparator_mad_ns": 392264,
+          "candidate_mad_ns": 235016,
+          "speedup": 1.00274999688826,
+          "runtime_reduction_percent": 0.2742455145144817,
+          "paired_wins": 8,
+          "paired_losses": 2,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": -632740
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": 557214
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": 610202
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": 322251
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": 389280
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": -49481277
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": 252264
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": 361408
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": 50473962
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 50548102
+            }
+          ]
+        },
+        "guided_vs_empty": {
+          "label": "inconclusive",
+          "comparator_median_ns": 215361245,
+          "candidate_median_ns": 215072607,
+          "comparator_mad_ns": 454590,
+          "candidate_mad_ns": 235016,
+          "speedup": 1.001342049106235,
+          "runtime_reduction_percent": 0.1340250424350955,
+          "paired_wins": 7,
+          "paired_losses": 3,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": -549783
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": 65703
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": 31752
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": -547772
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": -177922
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": 15772
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": 50551082
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": 443711
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": 50670642
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 50482635
+            }
+          ]
+        },
+        "random_vs_o3": {
+          "label": "inconclusive",
+          "comparator_median_ns": 215664056,
+          "candidate_median_ns": 215889647,
+          "comparator_mad_ns": 392264,
+          "candidate_mad_ns": 946765,
+          "speedup": 0.9989550633708711,
+          "runtime_reduction_percent": -0.10460296638397638,
+          "paired_wins": 5,
+          "paired_losses": 5,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": -678337
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": 644994
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": 610503
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": 818118
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": -803403
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": -49435635
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": -50183529
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": 563836
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": -47227
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 329637
+            }
+          ]
+        },
+        "random_vs_empty": {
+          "label": "inconclusive",
+          "comparator_median_ns": 215361245,
+          "candidate_median_ns": 215889647,
+          "comparator_mad_ns": 454590,
+          "candidate_mad_ns": 946765,
+          "speedup": 0.9975524440039498,
+          "runtime_reduction_percent": -0.24535612245369404,
+          "paired_wins": 7,
+          "paired_losses": 3,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": -595380
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": 153483
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": 32053
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": -51905
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": -1370605
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": 61414
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": 115289
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": 646139
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": 149453
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 264170
+            }
+          ]
+        },
+        "guided_vs_random": {
+          "label": "inconclusive",
+          "comparator_median_ns": 215889647,
+          "candidate_median_ns": 215072607,
+          "comparator_mad_ns": 946765,
+          "candidate_mad_ns": 235016,
+          "speedup": 1.0037989031304204,
+          "runtime_reduction_percent": 0.3784526082438775,
+          "paired_wins": 5,
+          "paired_losses": 5,
+          "paired_rounds": 10,
+          "paired_differences_ns": [
+            {
+              "round": 0,
+              "comparator_minus_candidate_ns": 45597
+            },
+            {
+              "round": 1,
+              "comparator_minus_candidate_ns": -87780
+            },
+            {
+              "round": 2,
+              "comparator_minus_candidate_ns": -301
+            },
+            {
+              "round": 3,
+              "comparator_minus_candidate_ns": -495867
+            },
+            {
+              "round": 4,
+              "comparator_minus_candidate_ns": 1192683
+            },
+            {
+              "round": 5,
+              "comparator_minus_candidate_ns": -45642
+            },
+            {
+              "round": 6,
+              "comparator_minus_candidate_ns": 50435793
+            },
+            {
+              "round": 7,
+              "comparator_minus_candidate_ns": -202428
+            },
+            {
+              "round": 8,
+              "comparator_minus_candidate_ns": 50521189
+            },
+            {
+              "round": 9,
+              "comparator_minus_candidate_ns": 50218465
+            }
+          ]
+        }
+      }
+    },
+    "failure_counts": {
+      "no_ir_change": 10
+    },
+    "trial_count": 40,
+    "sample_count": 375,
+    "interpretation": "Exploratory single-machine observations; quick mode is demo-only and has no held-out claim.",
+    "artifacts": [
+      "summary.json",
+      "trials.csv",
+      "samples.csv",
+      "environment.json",
+      "search.svg",
+      "pareto.svg"
+    ]
+  },
+  "trials": [
+    {
+      "id": "035737ea-79e8-4e16-9753-6d2c4af5fedb",
+      "strategy": "guided",
+      "ordinal": 1,
+      "effective_pipeline": "function(loop-mssa(licm))",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265328353,
+      "search_mad_ns": 191736,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "licm"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "3e6f5a8b-01c7-4519-905a-0d9f7dc26466",
+      "strategy": "guided",
+      "ordinal": 2,
+      "effective_pipeline": "function(loop-unroll)",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265336103,
+      "search_mad_ns": 296443,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "loop-unroll"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "46fa11a4-04f1-4150-838a-6968b0ed768c",
+      "strategy": "guided",
+      "ordinal": 3,
+      "effective_pipeline": "function(loop-vectorize)",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265417561,
+      "search_mad_ns": 267967,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "action_ids": [
+        "loop-vectorize"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "66a457f0-a3c0-47ae-a316-83f24a7561c9",
+      "strategy": "guided",
+      "ordinal": 4,
+      "effective_pipeline": "function(simplifycfg)",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "simplifycfg"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "0ab9ec83-f4f1-48af-86b1-e5cbb9172a87",
+      "strategy": "guided",
+      "ordinal": 5,
+      "effective_pipeline": "function(loop-mssa(licm)),function(loop-vectorize)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265144726,
+      "search_mad_ns": 118974,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "action_ids": [
+        "licm",
+        "loop-vectorize"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "c607f85e-2ca3-4c6f-a2c3-2f7840a0d03b",
+      "strategy": "guided",
+      "ordinal": 6,
+      "effective_pipeline": "function(gvn)",
+      "proposal_reason": "replace of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "gvn"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "7ef177a8-dab0-4635-b417-fd9204ae875d",
+      "strategy": "guided",
+      "ordinal": 7,
+      "effective_pipeline": "function(loop-vectorize),function(gvn),function(slp-vectorizer)",
+      "proposal_reason": "Reserved exploration proposal independent of current best.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265925276,
+      "search_mad_ns": 45956,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 265,
+      "action_ids": [
+        "loop-vectorize",
+        "gvn",
+        "slp-vectorizer"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "67014b25-c746-40a5-9369-da0646c212cd",
+      "strategy": "guided",
+      "ordinal": 8,
+      "effective_pipeline": "function(gvn),function(slp-vectorizer),function(loop-mssa(licm))",
+      "proposal_reason": "Reserved exploration proposal independent of current best.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 366779053,
+      "search_mad_ns": 169805,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "gvn",
+        "slp-vectorizer",
+        "licm"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "3b568106-ca3d-42da-bb98-e909f81f7010",
+      "strategy": "guided",
+      "ordinal": 9,
+      "effective_pipeline": "function(gvn),function(loop-vectorize)",
+      "proposal_reason": "replace of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265545793,
+      "search_mad_ns": 237507,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "action_ids": [
+        "gvn",
+        "loop-vectorize"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "8e716cb8-48ae-4021-a757-50b2c4c4705b",
+      "strategy": "guided",
+      "ordinal": 10,
+      "effective_pipeline": "function(loop-mssa(licm)),function(loop-unroll)",
+      "proposal_reason": "replace of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 266224857,
+      "search_mad_ns": 552640,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "licm",
+        "loop-unroll"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "384375f7-0c5e-48ff-9fde-20a7f09b4c43",
+      "strategy": "guided",
+      "ordinal": 11,
+      "effective_pipeline": "function(loop-mssa(licm)),function(slp-vectorizer)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265601197,
+      "search_mad_ns": 469026,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "licm",
+        "slp-vectorizer"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "1b247788-3f2b-4c38-a09d-ed298ab145bd",
+      "strategy": "guided",
+      "ordinal": 12,
+      "effective_pipeline": "function(instcombine)",
+      "proposal_reason": "replace of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "instcombine"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "90237c4f-a567-487f-a47d-ded66ee3264e",
+      "strategy": "guided",
+      "ordinal": 13,
+      "effective_pipeline": "function(loop-mssa(licm)),function(gvn)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265248902,
+      "search_mad_ns": 304193,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "action_ids": [
+        "licm",
+        "gvn"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "df02daab-61fe-4943-9fa8-5d9afaee8b96",
+      "strategy": "guided",
+      "ordinal": 14,
+      "effective_pipeline": "function(loop-mssa(licm)),function(gvn),function(instcombine)",
+      "proposal_reason": "append of measured trial 90237c4f-a567-487f-a47d-ded66ee3264e.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265724847,
+      "search_mad_ns": 215704,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "action_ids": [
+        "licm",
+        "gvn",
+        "instcombine"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "b68af96c-5a88-489e-aa81-fe0bd2381812",
+      "strategy": "guided",
+      "ordinal": 15,
+      "effective_pipeline": "function(loop-vectorize),function(loop-mssa(licm))",
+      "proposal_reason": "swap of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265453794,
+      "search_mad_ns": 315749,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 275,
+      "action_ids": [
+        "loop-vectorize",
+        "licm"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "b7481d1b-6687-43ec-80fe-061190d01b87",
+      "strategy": "guided",
+      "ordinal": 16,
+      "effective_pipeline": "function(gvn),function(loop-mssa(licm))",
+      "proposal_reason": "swap of measured trial 90237c4f-a567-487f-a47d-ded66ee3264e.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265527377,
+      "search_mad_ns": 316534,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "gvn",
+        "licm"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "6823b3ec-57a5-43e8-b540-503e50bc5fb8",
+      "strategy": "guided",
+      "ordinal": 17,
+      "effective_pipeline": "function(loop-unroll),function(loop-vectorize)",
+      "proposal_reason": "replace of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265416504,
+      "search_mad_ns": 253389,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "action_ids": [
+        "loop-unroll",
+        "loop-vectorize"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "05387a60-e13d-4bf0-b8da-4e4631193888",
+      "strategy": "guided",
+      "ordinal": 18,
+      "effective_pipeline": "function(simplifycfg),function(dce),function(instcombine),function(loop-vectorize)",
+      "proposal_reason": "Reserved exploration proposal independent of current best.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265433347,
+      "search_mad_ns": 299266,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "action_ids": [
+        "simplifycfg",
+        "dce",
+        "instcombine",
+        "loop-vectorize"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "878b107e-01a7-4f7d-8e2d-5f9911369dc0",
+      "strategy": "guided",
+      "ordinal": 19,
+      "effective_pipeline": "function(loop-mssa(licm)),function(simplifycfg)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265396888,
+      "search_mad_ns": 24007,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 194,
+      "action_ids": [
+        "licm",
+        "simplifycfg"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "4d74a87f-d70a-42df-ab49-4f98772c6d70",
+      "strategy": "guided",
+      "ordinal": 20,
+      "effective_pipeline": "function(loop-mssa(licm)),function(gvn),function(loop-unroll)",
+      "proposal_reason": "append of measured trial 90237c4f-a567-487f-a47d-ded66ee3264e.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265714394,
+      "search_mad_ns": 164665,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "licm",
+        "gvn",
+        "loop-unroll"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "4d3d4d38-1799-4b55-9623-17e86d4d4b0f",
+      "strategy": "random",
+      "ordinal": 1,
+      "effective_pipeline": "function(dce),function(simplifycfg)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "dce",
+        "simplifycfg"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "abab1b67-4ffb-4110-9f89-f70a01272093",
+      "strategy": "random",
+      "ordinal": 2,
+      "effective_pipeline": "function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265320185,
+      "search_mad_ns": 95885,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "loop-unroll"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "24a92d3b-6aeb-4134-8e50-7dd6335515dc",
+      "strategy": "random",
+      "ordinal": 3,
+      "effective_pipeline": "function(loop-mssa(licm)),function(dce),function(loop-unroll),function(instcombine)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265294567,
+      "search_mad_ns": 205733,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "action_ids": [
+        "licm",
+        "dce",
+        "loop-unroll",
+        "instcombine"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "370c761f-ef3e-479e-8fff-107bb3e432d0",
+      "strategy": "random",
+      "ordinal": 4,
+      "effective_pipeline": "function(slp-vectorizer),function(simplifycfg)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "slp-vectorizer",
+        "simplifycfg"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "cd5d85aa-a42c-4fd6-a65c-688d7e287eb2",
+      "strategy": "random",
+      "ordinal": 5,
+      "effective_pipeline": "function(simplifycfg),function(loop-mssa(licm)),function(dce)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265200774,
+      "search_mad_ns": 108605,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "simplifycfg",
+        "licm",
+        "dce"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "3007f1fa-1bf6-4934-b668-8d2e917eacf8",
+      "strategy": "random",
+      "ordinal": 6,
+      "effective_pipeline": "function(instcombine),function(loop-unroll),function(loop-vectorize)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265350499,
+      "search_mad_ns": 196798,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "action_ids": [
+        "instcombine",
+        "loop-unroll",
+        "loop-vectorize"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "dbf03fab-a90c-403a-8ae4-7f450d8bdf83",
+      "strategy": "random",
+      "ordinal": 7,
+      "effective_pipeline": "function(loop-mssa(licm)),function(simplifycfg),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 416386066,
+      "search_mad_ns": 292848,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 194,
+      "action_ids": [
+        "licm",
+        "simplifycfg",
+        "slp-vectorizer"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "8ce77f8a-3dc2-4dff-8519-03b513364703",
+      "strategy": "random",
+      "ordinal": 8,
+      "effective_pipeline": "function(loop-unroll),function(gvn),function(dce),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 316154023,
+      "search_mad_ns": 98724,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "action_ids": [
+        "loop-unroll",
+        "gvn",
+        "dce",
+        "slp-vectorizer"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "a6e6540f-0e36-44d2-835d-4107230ae227",
+      "strategy": "random",
+      "ordinal": 9,
+      "effective_pipeline": "function(slp-vectorizer),function(dce)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "slp-vectorizer",
+        "dce"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "5142fd27-cb74-4751-90e3-4f4fde4007a5",
+      "strategy": "random",
+      "ordinal": 10,
+      "effective_pipeline": "function(simplifycfg),function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265823586,
+      "search_mad_ns": 572723,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "simplifycfg",
+        "loop-unroll"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "9af03991-5f3c-488c-8564-efac8e205af2",
+      "strategy": "random",
+      "ordinal": 11,
+      "effective_pipeline": "function(dce)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "dce"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "c9976ea0-bbe9-410a-9797-903b5b129bb1",
+      "strategy": "random",
+      "ordinal": 12,
+      "effective_pipeline": "function(loop-mssa(licm))",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 315961006,
+      "search_mad_ns": 194549,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "licm"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "bea2d0c2-0901-40cf-931c-ff92f1d1c92f",
+      "strategy": "random",
+      "ordinal": 13,
+      "effective_pipeline": "function(loop-mssa(licm)),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 266622406,
+      "search_mad_ns": 1401229,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "licm",
+        "slp-vectorizer"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "c3b80ca8-80c8-4e47-af23-6747732eb089",
+      "strategy": "random",
+      "ordinal": 14,
+      "effective_pipeline": "function(simplifycfg),function(gvn)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "simplifycfg",
+        "gvn"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "fbfcd3fa-7486-4c26-b7eb-cb8bdcb59544",
+      "strategy": "random",
+      "ordinal": 15,
+      "effective_pipeline": "function(simplifycfg)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "simplifycfg"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "fe5007c3-a090-4722-ab93-30bb57ddb2e8",
+      "strategy": "random",
+      "ordinal": 16,
+      "effective_pipeline": "function(instcombine),function(simplifycfg),function(loop-vectorize)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265548615,
+      "search_mad_ns": 316092,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "action_ids": [
+        "instcombine",
+        "simplifycfg",
+        "loop-vectorize"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "fc6d1eb9-c53c-458b-8c0e-ea80b69fc16d",
+      "strategy": "random",
+      "ordinal": 17,
+      "effective_pipeline": "function(loop-unroll),function(instcombine),function(dce),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 315872255,
+      "search_mad_ns": 50005924,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "action_ids": [
+        "loop-unroll",
+        "instcombine",
+        "dce",
+        "slp-vectorizer"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "3c69d7e4-6704-455c-a2e9-66df1f7df4d3",
+      "strategy": "random",
+      "ordinal": 18,
+      "effective_pipeline": "function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "search_median_ns": null,
+      "search_mad_ns": null,
+      "executable_bytes": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "action_ids": [
+        "slp-vectorizer"
+      ],
+      "correctness": "rejected"
+    },
+    {
+      "id": "5f2332e1-bca5-4eff-89e0-cea7ee0d0a3c",
+      "strategy": "random",
+      "ordinal": 19,
+      "effective_pipeline": "function(instcombine),function(simplifycfg),function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265182454,
+      "search_mad_ns": 55966,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "action_ids": [
+        "instcombine",
+        "simplifycfg",
+        "loop-unroll"
+      ],
+      "correctness": "passed"
+    },
+    {
+      "id": "381139dd-0efc-4c56-ae42-2b36121829e6",
+      "strategy": "random",
+      "ordinal": 20,
+      "effective_pipeline": "function(loop-vectorize),function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "search_median_ns": 265495667,
+      "search_mad_ns": 85941,
+      "executable_bytes": 16360,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 275,
+      "action_ids": [
+        "loop-vectorize",
+        "loop-unroll"
+      ],
+      "correctness": "passed"
+    }
+  ],
+  "details": {
+    "035737ea-79e8-4e16-9753-6d2c4af5fedb": {
+      "id": "035737ea-79e8-4e16-9753-6d2c4af5fedb",
+      "strategy": "guided",
+      "ordinal": 1,
+      "action_ids": [
+        "licm"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm))",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1521484,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1581896,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265222793,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265366369,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 266353485,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265328353,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265209023,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265136617,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 266093763,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "3e6f5a8b-01c7-4519-905a-0d9f7dc26466": {
+      "id": "3e6f5a8b-01c7-4519-905a-0d9f7dc26466",
+      "strategy": "guided",
+      "ordinal": 2,
+      "action_ids": [
+        "loop-unroll"
+      ],
+      "effective_pipeline": "function(loop-unroll)",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1695615,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1632083,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265235708,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315693386,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 268310023,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265336103,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 316358336,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265095442,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265039660,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "46fa11a4-04f1-4150-838a-6968b0ed768c": {
+      "id": "46fa11a4-04f1-4150-838a-6968b0ed768c",
+      "strategy": "guided",
+      "ordinal": 3,
+      "action_ids": [
+        "loop-vectorize"
+      ],
+      "effective_pipeline": "function(loop-vectorize)",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1980651,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1834287,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265629058,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265136040,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265149594,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265991520,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265847678,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265314380,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265417561,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "66a457f0-a3c0-47ae-a316-83f24a7561c9": {
+      "id": "66a457f0-a3c0-47ae-a316-83f24a7561c9",
+      "strategy": "guided",
+      "ordinal": 4,
+      "action_ids": [
+        "simplifycfg"
+      ],
+      "effective_pipeline": "function(simplifycfg)",
+      "proposal_reason": "One-action probe; feature weight 3.0.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "0ab9ec83-f4f1-48af-86b1-e5cbb9172a87": {
+      "id": "0ab9ec83-f4f1-48af-86b1-e5cbb9172a87",
+      "strategy": "guided",
+      "ordinal": 5,
+      "action_ids": [
+        "licm",
+        "loop-vectorize"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(loop-vectorize)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1924587,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1733833,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 266087148,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265075129,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 266136944,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265163442,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265144726,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265025752,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265024988,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265759130,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 0,
+          "repetition": 0,
+          "duration_ns": 264916339,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 1,
+          "repetition": 1,
+          "duration_ns": 265689643,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 2,
+          "repetition": 2,
+          "duration_ns": 316216075,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 3,
+          "repetition": 3,
+          "duration_ns": 265190530,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 4,
+          "repetition": 4,
+          "duration_ns": 214704224,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 5,
+          "repetition": 5,
+          "duration_ns": 214977572,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 6,
+          "repetition": 6,
+          "duration_ns": 265281268,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 7,
+          "repetition": 7,
+          "duration_ns": 265689842,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 8,
+          "repetition": 8,
+          "duration_ns": 265726218,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 9,
+          "repetition": 9,
+          "duration_ns": 265044158,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_warmup",
+          "input_kind": "holdout",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 214769296,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 0,
+          "repetition": 0,
+          "duration_ns": 215613102,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 1,
+          "repetition": 1,
+          "duration_ns": 215128890,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 2,
+          "repetition": 2,
+          "duration_ns": 215067361,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 3,
+          "repetition": 3,
+          "duration_ns": 215779470,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 4,
+          "repetition": 4,
+          "duration_ns": 214927912,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 5,
+          "repetition": 5,
+          "duration_ns": 265131826,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 6,
+          "repetition": 6,
+          "duration_ns": 214654202,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 7,
+          "repetition": 7,
+          "duration_ns": 215047082,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 8,
+          "repetition": 8,
+          "duration_ns": 214747269,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 9,
+          "repetition": 9,
+          "duration_ns": 215077854,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        }
+      ]
+    },
+    "c607f85e-2ca3-4c6f-a2c3-2f7840a0d03b": {
+      "id": "c607f85e-2ca3-4c6f-a2c3-2f7840a0d03b",
+      "strategy": "guided",
+      "ordinal": 6,
+      "action_ids": [
+        "gvn"
+      ],
+      "effective_pipeline": "function(gvn)",
+      "proposal_reason": "replace of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "7ef177a8-dab0-4635-b417-fd9204ae875d": {
+      "id": "7ef177a8-dab0-4635-b417-fd9204ae875d",
+      "strategy": "guided",
+      "ordinal": 7,
+      "action_ids": [
+        "loop-vectorize",
+        "gvn",
+        "slp-vectorizer"
+      ],
+      "effective_pipeline": "function(loop-vectorize),function(gvn),function(slp-vectorizer)",
+      "proposal_reason": "Reserved exploration proposal independent of current best.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 265,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2119326,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1879074,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265763195,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265431473,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265925276,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 316115035,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265879320,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 266221107,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265911923,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "67014b25-c746-40a5-9369-da0646c212cd": {
+      "id": "67014b25-c746-40a5-9369-da0646c212cd",
+      "strategy": "guided",
+      "ordinal": 8,
+      "action_ids": [
+        "gvn",
+        "slp-vectorizer",
+        "licm"
+      ],
+      "effective_pipeline": "function(gvn),function(slp-vectorizer),function(loop-mssa(licm))",
+      "proposal_reason": "Reserved exploration proposal independent of current best.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2029185,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2192359,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 366300303,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 366345508,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 366779053,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 366609248,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 416889969,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 416588026,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 366648918,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "3b568106-ca3d-42da-bb98-e909f81f7010": {
+      "id": "3b568106-ca3d-42da-bb98-e909f81f7010",
+      "strategy": "guided",
+      "ordinal": 9,
+      "action_ids": [
+        "gvn",
+        "loop-vectorize"
+      ],
+      "effective_pipeline": "function(gvn),function(loop-vectorize)",
+      "proposal_reason": "replace of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1914337,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1987535,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 316064525,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265514852,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265308286,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265492255,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265545793,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265948395,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265874015,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "8e716cb8-48ae-4021-a757-50b2c4c4705b": {
+      "id": "8e716cb8-48ae-4021-a757-50b2c4c4705b",
+      "strategy": "guided",
+      "ordinal": 10,
+      "action_ids": [
+        "licm",
+        "loop-unroll"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(loop-unroll)",
+      "proposal_reason": "replace of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1720614,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2017888,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315828265,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315877330,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315910051,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 266002086,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265672217,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 266224857,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 316362624,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "384375f7-0c5e-48ff-9fde-20a7f09b4c43": {
+      "id": "384375f7-0c5e-48ff-9fde-20a7f09b4c43",
+      "strategy": "guided",
+      "ordinal": 11,
+      "action_ids": [
+        "licm",
+        "slp-vectorizer"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(slp-vectorizer)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1821279,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1668718,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265313172,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 316009983,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265601197,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 315583660,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 315285946,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265132171,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265253639,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "1b247788-3f2b-4c38-a09d-ed298ab145bd": {
+      "id": "1b247788-3f2b-4c38-a09d-ed298ab145bd",
+      "strategy": "guided",
+      "ordinal": 12,
+      "action_ids": [
+        "instcombine"
+      ],
+      "effective_pipeline": "function(instcombine)",
+      "proposal_reason": "replace of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "90237c4f-a567-487f-a47d-ded66ee3264e": {
+      "id": "90237c4f-a567-487f-a47d-ded66ee3264e",
+      "strategy": "guided",
+      "ordinal": 13,
+      "action_ids": [
+        "licm",
+        "gvn"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(gvn)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1618487,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1846629,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315633682,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315454250,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265169144,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265248902,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 264944709,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 315385766,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 315757213,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "df02daab-61fe-4943-9fa8-5d9afaee8b96": {
+      "id": "df02daab-61fe-4943-9fa8-5d9afaee8b96",
+      "strategy": "guided",
+      "ordinal": 14,
+      "action_ids": [
+        "licm",
+        "gvn",
+        "instcombine"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(gvn),function(instcombine)",
+      "proposal_reason": "append of measured trial 90237c4f-a567-487f-a47d-ded66ee3264e.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1665284,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 26167351,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315882109,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 266076498,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 216340982,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265940551,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265724847,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265517256,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 315900525,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "b68af96c-5a88-489e-aa81-fe0bd2381812": {
+      "id": "b68af96c-5a88-489e-aa81-fe0bd2381812",
+      "strategy": "guided",
+      "ordinal": 15,
+      "action_ids": [
+        "loop-vectorize",
+        "licm"
+      ],
+      "effective_pipeline": "function(loop-vectorize),function(loop-mssa(licm))",
+      "proposal_reason": "swap of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 275,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1710560,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1685338,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265313083,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 267194458,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265138045,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265636374,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 266671333,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265453794,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265104865,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "b7481d1b-6687-43ec-80fe-061190d01b87": {
+      "id": "b7481d1b-6687-43ec-80fe-061190d01b87",
+      "strategy": "guided",
+      "ordinal": 16,
+      "action_ids": [
+        "gvn",
+        "licm"
+      ],
+      "effective_pipeline": "function(gvn),function(loop-mssa(licm))",
+      "proposal_reason": "swap of measured trial 90237c4f-a567-487f-a47d-ded66ee3264e.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1812234,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1782708,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265547511,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265079923,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 264954637,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265210843,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265822078,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 316643266,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265527377,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "6823b3ec-57a5-43e8-b540-503e50bc5fb8": {
+      "id": "6823b3ec-57a5-43e8-b540-503e50bc5fb8",
+      "strategy": "guided",
+      "ordinal": 17,
+      "action_ids": [
+        "loop-unroll",
+        "loop-vectorize"
+      ],
+      "effective_pipeline": "function(loop-unroll),function(loop-vectorize)",
+      "proposal_reason": "replace of measured trial 0ab9ec83-f4f1-48af-86b1-e5cbb9172a87.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1605223,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1564137,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265281497,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 215628140,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265163115,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 215111827,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265432262,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265416504,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265927130,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "05387a60-e13d-4bf0-b8da-4e4631193888": {
+      "id": "05387a60-e13d-4bf0-b8da-4e4631193888",
+      "strategy": "guided",
+      "ordinal": 18,
+      "action_ids": [
+        "simplifycfg",
+        "dce",
+        "instcombine",
+        "loop-vectorize"
+      ],
+      "effective_pipeline": "function(simplifycfg),function(dce),function(instcombine),function(loop-vectorize)",
+      "proposal_reason": "Reserved exploration proposal independent of current best.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1894526,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2090183,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265598131,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265440561,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265433347,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 215264063,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265732613,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265680253,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 215337079,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "878b107e-01a7-4f7d-8e2d-5f9911369dc0": {
+      "id": "878b107e-01a7-4f7d-8e2d-5f9911369dc0",
+      "strategy": "guided",
+      "ordinal": 19,
+      "action_ids": [
+        "licm",
+        "simplifycfg"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(simplifycfg)",
+      "proposal_reason": "append of measured trial 035737ea-79e8-4e16-9753-6d2c4af5fedb.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 194,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1693475,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2171075,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265497773,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 264973090,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265462975,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265229307,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265396888,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265388434,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265420895,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "4d74a87f-d70a-42df-ab49-4f98772c6d70": {
+      "id": "4d74a87f-d70a-42df-ab49-4f98772c6d70",
+      "strategy": "guided",
+      "ordinal": 20,
+      "action_ids": [
+        "licm",
+        "gvn",
+        "loop-unroll"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(gvn),function(loop-unroll)",
+      "proposal_reason": "append of measured trial 90237c4f-a567-487f-a47d-ded66ee3264e.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1634902,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1720892,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 316389289,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265779286,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265879059,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265714394,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265726229,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 264869464,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265020267,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "4d3d4d38-1799-4b55-9623-17e86d4d4b0f": {
+      "id": "4d3d4d38-1799-4b55-9623-17e86d4d4b0f",
+      "strategy": "random",
+      "ordinal": 1,
+      "action_ids": [
+        "dce",
+        "simplifycfg"
+      ],
+      "effective_pipeline": "function(dce),function(simplifycfg)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "abab1b67-4ffb-4110-9f89-f70a01272093": {
+      "id": "abab1b67-4ffb-4110-9f89-f70a01272093",
+      "strategy": "random",
+      "ordinal": 2,
+      "action_ids": [
+        "loop-unroll"
+      ],
+      "effective_pipeline": "function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2037420,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1711321,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315604908,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 270073148,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265320185,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265768553,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265940471,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265309958,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265224300,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "24a92d3b-6aeb-4134-8e50-7dd6335515dc": {
+      "id": "24a92d3b-6aeb-4134-8e50-7dd6335515dc",
+      "strategy": "random",
+      "ordinal": 3,
+      "action_ids": [
+        "licm",
+        "dce",
+        "loop-unroll",
+        "instcombine"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(dce),function(loop-unroll),function(instcombine)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2395746,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2069295,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 316194577,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265431289,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265561752,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265088834,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265294567,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265103725,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265991798,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "370c761f-ef3e-479e-8fff-107bb3e432d0": {
+      "id": "370c761f-ef3e-479e-8fff-107bb3e432d0",
+      "strategy": "random",
+      "ordinal": 4,
+      "action_ids": [
+        "slp-vectorizer",
+        "simplifycfg"
+      ],
+      "effective_pipeline": "function(slp-vectorizer),function(simplifycfg)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "cd5d85aa-a42c-4fd6-a65c-688d7e287eb2": {
+      "id": "cd5d85aa-a42c-4fd6-a65c-688d7e287eb2",
+      "strategy": "random",
+      "ordinal": 5,
+      "action_ids": [
+        "simplifycfg",
+        "licm",
+        "dce"
+      ],
+      "effective_pipeline": "function(simplifycfg),function(loop-mssa(licm)),function(dce)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1780960,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1770334,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 264981495,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265316379,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265200774,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265135726,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265002456,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265309379,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 317093668,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "3007f1fa-1bf6-4934-b668-8d2e917eacf8": {
+      "id": "3007f1fa-1bf6-4934-b668-8d2e917eacf8",
+      "strategy": "random",
+      "ordinal": 6,
+      "action_ids": [
+        "instcombine",
+        "loop-unroll",
+        "loop-vectorize"
+      ],
+      "effective_pipeline": "function(instcombine),function(loop-unroll),function(loop-vectorize)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1737626,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1525495,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265479843,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265334053,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265333934,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265350499,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265153701,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 267144419,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265786317,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "dbf03fab-a90c-403a-8ae4-7f450d8bdf83": {
+      "id": "dbf03fab-a90c-403a-8ae4-7f450d8bdf83",
+      "strategy": "random",
+      "ordinal": 7,
+      "action_ids": [
+        "licm",
+        "simplifycfg",
+        "slp-vectorizer"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(simplifycfg),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 194,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1964088,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1789059,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 365864755,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 466267860,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 366195317,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 416386066,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 416232624,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 466314931,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 416678914,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "8ce77f8a-3dc2-4dff-8519-03b513364703": {
+      "id": "8ce77f8a-3dc2-4dff-8519-03b513364703",
+      "strategy": "random",
+      "ordinal": 8,
+      "action_ids": [
+        "loop-unroll",
+        "gvn",
+        "dce",
+        "slp-vectorizer"
+      ],
+      "effective_pipeline": "function(loop-unroll),function(gvn),function(dce),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2222274,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 2065772,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 466595952,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 366002709,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 316055299,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 316049213,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 316154023,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 316432212,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 316191258,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "a6e6540f-0e36-44d2-835d-4107230ae227": {
+      "id": "a6e6540f-0e36-44d2-835d-4107230ae227",
+      "strategy": "random",
+      "ordinal": 9,
+      "action_ids": [
+        "slp-vectorizer",
+        "dce"
+      ],
+      "effective_pipeline": "function(slp-vectorizer),function(dce)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "5142fd27-cb74-4751-90e3-4f4fde4007a5": {
+      "id": "5142fd27-cb74-4751-90e3-4f4fde4007a5",
+      "strategy": "random",
+      "ordinal": 10,
+      "action_ids": [
+        "simplifycfg",
+        "loop-unroll"
+      ],
+      "effective_pipeline": "function(simplifycfg),function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1835200,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1735261,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 316140655,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265874591,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265189267,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 266519836,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265823586,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265250863,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 266240435,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "9af03991-5f3c-488c-8564-efac8e205af2": {
+      "id": "9af03991-5f3c-488c-8564-efac8e205af2",
+      "strategy": "random",
+      "ordinal": 11,
+      "action_ids": [
+        "dce"
+      ],
+      "effective_pipeline": "function(dce)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "c9976ea0-bbe9-410a-9797-903b5b129bb1": {
+      "id": "c9976ea0-bbe9-410a-9797-903b5b129bb1",
+      "strategy": "random",
+      "ordinal": 12,
+      "action_ids": [
+        "licm"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm))",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1845622,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1776079,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265152047,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265427407,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265200200,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 315961006,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 315978007,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265185779,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 316155555,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "bea2d0c2-0901-40cf-931c-ff92f1d1c92f": {
+      "id": "bea2d0c2-0901-40cf-931c-ff92f1d1c92f",
+      "strategy": "random",
+      "ordinal": 13,
+      "action_ids": [
+        "licm",
+        "slp-vectorizer"
+      ],
+      "effective_pipeline": "function(loop-mssa(licm)),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1580650,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1579641,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265108431,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265381081,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265419213,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 268023635,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 264899396,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 268204644,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 266622406,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "c3b80ca8-80c8-4e47-af23-6747732eb089": {
+      "id": "c3b80ca8-80c8-4e47-af23-6747732eb089",
+      "strategy": "random",
+      "ordinal": 14,
+      "action_ids": [
+        "simplifycfg",
+        "gvn"
+      ],
+      "effective_pipeline": "function(simplifycfg),function(gvn)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "fbfcd3fa-7486-4c26-b7eb-cb8bdcb59544": {
+      "id": "fbfcd3fa-7486-4c26-b7eb-cb8bdcb59544",
+      "strategy": "random",
+      "ordinal": 15,
+      "action_ids": [
+        "simplifycfg"
+      ],
+      "effective_pipeline": "function(simplifycfg)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "fe5007c3-a090-4722-ab93-30bb57ddb2e8": {
+      "id": "fe5007c3-a090-4722-ab93-30bb57ddb2e8",
+      "strategy": "random",
+      "ordinal": 16,
+      "action_ids": [
+        "instcombine",
+        "simplifycfg",
+        "loop-vectorize"
+      ],
+      "effective_pipeline": "function(instcombine),function(simplifycfg),function(loop-vectorize)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 271,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1847455,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1630235,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265700792,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 215178160,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 215079524,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265864707,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265490389,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265891023,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265548615,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "fc6d1eb9-c53c-458b-8c0e-ea80b69fc16d": {
+      "id": "fc6d1eb9-c53c-458b-8c0e-ea80b69fc16d",
+      "strategy": "random",
+      "ordinal": 17,
+      "action_ids": [
+        "loop-unroll",
+        "instcombine",
+        "dce",
+        "slp-vectorizer"
+      ],
+      "effective_pipeline": "function(loop-unroll),function(instcombine),function(dce),function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 195,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1892036,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1663883,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265057158,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265796362,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315705579,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 366634466,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 416732326,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 365800643,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 315998198,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 5,
+          "duration_ns": 365883251,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 6,
+          "duration_ns": 315746313,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 7,
+          "duration_ns": 265140450,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 8,
+          "duration_ns": 265871403,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 9,
+          "duration_ns": 265801343,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    },
+    "3c69d7e4-6704-455c-a2e9-66df1f7df4d3": {
+      "id": "3c69d7e4-6704-455c-a2e9-66df1f7df4d3",
+      "strategy": "random",
+      "ordinal": 18,
+      "action_ids": [
+        "slp-vectorizer"
+      ],
+      "effective_pipeline": "function(slp-vectorizer)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "no_ir_change",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 191,
+      "samples": []
+    },
+    "5f2332e1-bca5-4eff-89e0-cea7ee0d0a3c": {
+      "id": "5f2332e1-bca5-4eff-89e0-cea7ee0d0a3c",
+      "strategy": "random",
+      "ordinal": 19,
+      "action_ids": [
+        "instcombine",
+        "simplifycfg",
+        "loop-unroll"
+      ],
+      "effective_pipeline": "function(instcombine),function(simplifycfg),function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 198,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1682085,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1766053,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265086236,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265450830,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 266770141,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265096020,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265151184,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265238420,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265182454,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 315326541,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 0,
+          "repetition": 0,
+          "duration_ns": 265510723,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 1,
+          "repetition": 1,
+          "duration_ns": 315601440,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 2,
+          "repetition": 2,
+          "duration_ns": 315707181,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 3,
+          "repetition": 3,
+          "duration_ns": 315769778,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 4,
+          "repetition": 4,
+          "duration_ns": 265107448,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 5,
+          "repetition": 5,
+          "duration_ns": 264859940,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 6,
+          "repetition": 6,
+          "duration_ns": 265188920,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 7,
+          "repetition": 7,
+          "duration_ns": 265086664,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 8,
+          "repetition": 8,
+          "duration_ns": 265333200,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_tuning",
+          "input_kind": "tuning",
+          "round": 9,
+          "repetition": 9,
+          "duration_ns": 265428264,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_warmup",
+          "input_kind": "holdout",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265292084,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 0,
+          "repetition": 0,
+          "duration_ns": 215658699,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 1,
+          "repetition": 1,
+          "duration_ns": 215041110,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 2,
+          "repetition": 2,
+          "duration_ns": 215067060,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 3,
+          "repetition": 3,
+          "duration_ns": 215283603,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 4,
+          "repetition": 4,
+          "duration_ns": 216120595,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 5,
+          "repetition": 5,
+          "duration_ns": 265086184,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 6,
+          "repetition": 6,
+          "duration_ns": 265089995,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 7,
+          "repetition": 7,
+          "duration_ns": 214844654,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 8,
+          "repetition": 8,
+          "duration_ns": 265268458,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        },
+        {
+          "phase": "confirmation_holdout",
+          "input_kind": "holdout",
+          "round": 9,
+          "repetition": 9,
+          "duration_ns": 265296319,
+          "checksum": "checksum:16695367c6b226b9\n",
+          "valid": 1
+        }
+      ]
+    },
+    "381139dd-0efc-4c56-ae42-2b36121829e6": {
+      "id": "381139dd-0efc-4c56-ae42-2b36121829e6",
+      "strategy": "random",
+      "ordinal": 20,
+      "action_ids": [
+        "loop-vectorize",
+        "loop-unroll"
+      ],
+      "effective_pipeline": "function(loop-vectorize),function(loop-unroll)",
+      "proposal_reason": "Seeded random sequence; no IR or other-policy history used.",
+      "status": "valid",
+      "error_code": null,
+      "ir_instructions_before": 191,
+      "ir_instructions_after": 275,
+      "samples": [
+        {
+          "phase": "correctness",
+          "input_kind": "small_0",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1695975,
+          "checksum": "checksum:a842d10f7a169d8b\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "small_1",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 1684230,
+          "checksum": "checksum:77ea946c22b2a9bd\n",
+          "valid": 1
+        },
+        {
+          "phase": "correctness",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265477094,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search_warmup",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265170619,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 0,
+          "duration_ns": 265495667,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 1,
+          "duration_ns": 265652397,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 2,
+          "duration_ns": 265409726,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 3,
+          "duration_ns": 265469651,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        },
+        {
+          "phase": "search",
+          "input_kind": "tuning",
+          "round": null,
+          "repetition": 4,
+          "duration_ns": 265861515,
+          "checksum": "checksum:0c6657979cd2040a\n",
+          "valid": 1
+        }
+      ]
+    }
+  }
+}
