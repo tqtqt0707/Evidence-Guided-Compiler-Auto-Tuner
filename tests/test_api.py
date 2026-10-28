@@ -21,7 +21,7 @@ def test_api_contract_and_saved_experiment_access():
         assert {item["id"] for item in benchmarks.json()["items"]} == {"dot", "matmul", "histogram", "pipeline", "skew_histogram"}
         assert client.get("/v1/actions").status_code == 200
         paths = {path: methods for path, item in client.get("/openapi.json").json()["paths"].items() for methods in [set(item)] if path.startswith("/v1")}
-        assert sum(len(methods) for methods in paths.values()) == 13
+        assert sum(len(methods) for methods in paths.values()) == 20
         assert client.get("/v1/experiments").status_code == 200
         assert client.get("/v1/experiments/00000000-0000-0000-0000-000000000000").status_code == 404
         invalid = client.post("/v1/experiments", json={"benchmark_id": "dot", "mode": "quick", "budget_per_strategy": 21})

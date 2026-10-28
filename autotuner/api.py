@@ -21,6 +21,8 @@ from .models import ExperimentRequest
 from .llm import OpenAISettings
 from .service import TuningService
 from .inspection import InspectionError, inspect_source
+from .research import ResearchManager
+from .research_api import router as research_router
 
 
 class WorkloadBody(BaseModel):
@@ -83,11 +85,13 @@ async def lifespan(app: FastAPI):
     app.state.inspection_lock = threading.Lock()
     worker = threading.Thread(target=_worker, args=(app,), name="autotuner-worker", daemon=True)
     worker.start()
+    app.state.research = ResearchManager()
     app.state.closing = False
     try:
         yield
     finally:
         app.state.closing = True
+        await asyncio.to_thread(app.state.research.close)
         # Finish accepted work before stopping the thread on a graceful shutdown.
         await asyncio.to_thread(app.state.jobs.join)
         app.state.jobs.put_nowait(None)
@@ -95,6 +99,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Evidence-Guided LLVM Pass Tuner", version="0.1.0", lifespan=lifespan)
+app.include_router(research_router)
 app.mount("/static", StaticFiles(directory=WEB), name="static")
 app.mount("/examples", StaticFiles(directory=ROOT / "examples", check_dir=False), name="examples")
 
@@ -301,3 +306,8 @@ def artifact(experiment_id: UUID, name: str, request: Request):
     if not target.is_file() or target.resolve().parent != (RUNS_DIR / str(experiment_id)).resolve():
         raise HTTPException(404, "Artifact not found")
     return FileResponse(target, media_type=row["media_type"], headers={"ETag": row["sha256"]})
+
+
+@app.get("/research", include_in_schema=False)
+def research_page():
+    return FileResponse(WEB / "research.html")

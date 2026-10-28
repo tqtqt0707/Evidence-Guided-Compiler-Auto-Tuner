@@ -81,7 +81,7 @@ test('real browser, FastAPI worker, LLVM, saved evidence, cancel, and retry', { 
   // Inspect a function without main, runtime inputs, or expected output.
   await page.getByRole('button', { name: 'Load example code' }).click();
   await page.locator('#source-code').fill('int twice(int x) { int redundant = x + 0; return redundant * 2; }');
-  await page.getByRole('button', { name: 'Inspect code' }).click();
+  await page.locator('#inspect-quick').click();
   await page.locator('#inspection-results').waitFor({ state: 'visible', timeout: 90000 });
   assert.match(await page.locator('#inspection-notice').innerText(), /not executed/);
   assert.match(await page.locator('#inspection-before').textContent(), /define.*twice/);

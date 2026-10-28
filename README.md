@@ -185,3 +185,7 @@ Node/Playwright are development-only dependencies; the app still needs no fronte
 ## Research context
 
 AutoPass and Compiler-R1 motivate evidence-guided pass tuning, but this project does not reproduce their models or reported results. The local contribution is a small, auditable search with an equal-budget comparator and explicit correctness and measurement gates. LLVM's [new pass manager](https://llvm.org/docs/NewPassManager.html), [`opt` guide](https://llvm.org/docs/CommandGuide/opt.html), and [benchmarking guidance](https://llvm.org/docs/Benchmarking.html) define the relevant tool behavior.
+
+## Research Lab
+
+Open /research for eight compiler-backed extensions: pass ablation/order experiments, actual LLVM remarks, workload robustness maps, adaptive cross-program experience, trusted custom C benchmarking, constrained objectives, interactive control flow, and stronger correctness validation. See [Research Lab documentation](docs/RESEARCH_LAB.md) for contracts, API, reproducibility and verification limits. The optional Alive2 adapter clearly reports unavailable or unsupported cases.

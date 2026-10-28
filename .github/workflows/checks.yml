@@ -17,6 +17,18 @@ jobs:
           /tmp/tuner-venv/bin/python -m autotuner doctor
           /tmp/tuner-venv/bin/python -m coverage run -m pytest -q
           /tmp/tuner-venv/bin/python -m coverage report
+      - name: Generate fresh research evidence
+        run: /tmp/tuner-venv/bin/python scripts/generate_research_evidence.py
+        env:
+          AUTOTUNER_DATA_DIR: /tmp/research-review-data
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: research-evidence
+          path: |
+            test-results/research-review.json
+            test-results/custom-review.json
+          if-no-files-found: warn
       - name: Verify wheel resource inclusion
         run: /tmp/tuner-venv/bin/python scripts/check_package.py
   browser:

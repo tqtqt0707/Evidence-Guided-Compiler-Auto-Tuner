@@ -7,7 +7,7 @@ name = "evidence-guided-compiler-auto-tuner"
 version = "0.1.0"
 description = "A bounded, correctness-checked LLVM pass tuning experiment"
 requires-python = ">=3.11"
-dependencies = ["openai>=2.0,<3", "python-dotenv>=1.0,<2"]
+dependencies = ["openai>=2.0,<3", "python-dotenv>=1.0,<2", "PyYAML>=6,<7"]
 
 [project.optional-dependencies]
 web = ["fastapi>=0.115", "uvicorn>=0.30"]
