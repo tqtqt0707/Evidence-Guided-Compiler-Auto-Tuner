@@ -42,6 +42,6 @@ def test_two_real_compiler_versions_are_measured_separately(tmp_path):
     req=small();req["compiler_versions"]=[20,21]
     result=DeploymentRunner(req,tmp_path/"migration").execute()
     assert result["migration"]["status"]=="compared"
+    assert result["envelope"]["compiler"]==21
     assert {r["compiler"] for r in result["search"]["records"]}=={20,21}
     assert (tmp_path/"migration"/"llvm-20"/"source.c").read_bytes()==(tmp_path/"migration"/"llvm-21"/"source.c").read_bytes()
-

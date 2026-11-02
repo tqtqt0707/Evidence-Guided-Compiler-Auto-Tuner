@@ -17,7 +17,9 @@ python -m autotuner serve --host 127.0.0.1 --port 8000
 Open `/research` and use **Challenge an optimization before deployment**. Select one
 compiler to study workload robustness, or two to measure migration. Missing toolsets
 cause an explicit error; a one-version run is marked `requires_second_compiler` and
-never pretends to compare versions. Classic experiments still require LLVM 21.
+never pretends to compare versions. With two versions, list the current compiler
+first and the proposed deployment compiler last: `[20, 21]` calibrates and dispatches
+LLVM 21 artifacts. Classic experiments still require LLVM 21.
 
 The standalone entry point accepts the same JSON request as the API:
 
@@ -151,4 +153,3 @@ Linux integration tests compile all three histogram distributions, compare with 
 independent oracle, execute the real launcher, and compare LLVM 20 and 21 when both
 are installed. Compiler CI installs both. Short CI runs establish execution and
 evidence handling, not performance gains.
-

@@ -119,6 +119,8 @@ def test_joint_search_migration_envelope_and_holdout_are_separated(monkeypatch,t
     assert result["budgets"]["envelope_spent"] <= result["budgets"]["envelope_limit"]
     assert {r["compiler"] for r in result["search"]["records"]}=={20,21}
     assert result["migration"]["status"]=="compared"
+    assert result["envelope"]["compiler"]==21
+    assert result["artifacts"]["baseline"]["path"].replace("\\","/").startswith("llvm-21/")
     assert any(e["operation"]=="challenge_workload" for e in result["search"]["events"])
     assert any(e["operation"]=="repair_sequence" for e in result["search"]["events"])
     assert result["counterexamples"]

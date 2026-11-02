@@ -269,7 +269,8 @@ class DeploymentRunner:
                      for v in req["compiler_versions"]]
         for compiler in compilers:
             compiler.prepare()
-        primary = compilers[0]
+        # The last requested version is the proposed deployment target.
+        primary = compilers[-1]
         diagnostics = [c.diagnostic(req["actions"]) for c in compilers]
         delta = evidence_delta(diagnostics)
         repairs = repair_sequences(req["actions"], delta)
@@ -376,7 +377,7 @@ class DeploymentRunner:
                 queue.clear()
         if not cells:
             cells = [cell_decision([], req["min_size"], req["max_size"], d, req["rounds"]) for d in req["distributions"]]
-        envelope = dict(cells=cells, repeat=req["repeat"], compiler=req["compiler_versions"][0],
+        envelope = dict(cells=cells, repeat=req["repeat"], compiler=req["compiler_versions"][-1],
                         calibration_seeds=calibration_seeds, selection="Frozen before final holdout",
                         guarantee="Empirical only. Unmeasured conditions use direct -O3.")
 
@@ -457,7 +458,7 @@ def dispatch(report_path, argv, replace=True):
     if args.distribution not in req["distributions"]:
         raise ValueError("Distribution unsupported by this report")
     w = DeploymentWorkload(args.size, args.seed, args.repeat, args.distribution)
-    current = Toolchain(req["compiler_versions"][0]).environment()
+    current = Toolchain(req["compiler_versions"][-1]).environment()
     if context_key(current) != report["provenance"]["context_hash"]:
         raise ValueError("Compiler or CPU context changed; recalibrate before dispatch")
     decision, reason = choose_dispatch(report["envelope"], w)
@@ -499,4 +500,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
