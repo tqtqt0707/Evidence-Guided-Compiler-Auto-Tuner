@@ -49,4 +49,3 @@ $("deployment-form").onsubmit=async e=>{
  text("deployment-compilers",versions.length?"Installed LLVM toolsets: "+versions.join(", ")+". Select two to test migration.":"No complete LLVM toolsets detected. Saved deployment JSON can still be opened above.");
  if(versions.length)$("deployment-versions").value=versions.slice(-2).join(", ");
 }catch(ex){error(ex.message);}})();
-

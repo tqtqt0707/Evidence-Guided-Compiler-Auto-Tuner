@@ -122,4 +122,3 @@ $("research-form").onsubmit=async e=>{
 (async()=>{try{const data=await json("/v1/research/capabilities");compilerReady=data.compiler_available;text("capability",compilerReady?"LLVM available · local execution":"Viewer mode · Linux LLVM required for new runs");$("run-lab").disabled=!compilerReady;$("kernel-source").value=data.custom_example;$("reference-source").value=data.reference_example;}catch(ex){error(ex.message);$("run-lab").disabled=true;}})();
 
 $("open-custom-evidence").onclick=async()=>{try{loadReport(await json("/examples/research/custom-evidence.json"),"Bundled custom C compiler run");}catch(ex){error(ex.message);}};
-

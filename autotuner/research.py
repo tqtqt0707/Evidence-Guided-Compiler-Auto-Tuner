@@ -368,4 +368,3 @@ def main():
     result=ResearchRunner(request,out.parent/("research-"+str(uuid4())),lambda x:print(x,flush=True)).execute()
     atomic_json(out,result);print(str(out))
 if __name__=="__main__":main()
-

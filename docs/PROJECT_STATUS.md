@@ -59,4 +59,3 @@ The final local checks passed: 31 Python tests and six Chromium browser tests. B
 The expanded suite passes **104 Python tests and eight Chromium tests**. The browser suite now includes a complete workflow against the actual FastAPI worker and LLVM through a stdio ASGI bridge. Clean sdist/wheel installation, resource hashes, standalone CLI commands, and portable exports also pass. In-process Python coverage is 90.7% of statements and 80.1% of branches.
 
 New fixes cover structured toolchain failures, calibration input/checksum errors, duplicate execution before preflight, Ctrl+C process/state cleanup, orphan recovery, clean CLI errors, and exact display of saved uint64 seeds. Automated tests use disposable records and cache directories. See [test plan](TEST_PLAN.md) and [full results and limits](TEST_RESULTS_2026-10-20.md). Hosted CI and actual TCP/Uvicorn socket behavior have not been verified in this run.
-

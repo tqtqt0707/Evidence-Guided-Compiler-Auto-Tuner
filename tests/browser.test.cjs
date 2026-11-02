@@ -290,4 +290,3 @@ test('cancel shows partial evidence and retry selects a fresh experiment', async
   await page.waitForFunction(() => document.getElementById('run-id').textContent === 'fresh');
   assert.equal(retried, true);
 });
-

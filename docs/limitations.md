@@ -19,4 +19,3 @@ expand the evidence supporting those measurements.
 - Cancellation is cooperative between compiler stages/executions, not immediate process interruption. Retry creates a new experiment and does not resume partial search state.
 - Full win/loss classification needs at least ten matched confirmation rounds, a 2% median difference, and agreement in at least 80% of paired rounds. User-selected shorter full runs remain inconclusive. These thresholds are exploratory, not a significance test.
 - The original proposal deck and speech PDFs are historical artifacts. Their latency and AI-service promises do not describe this implementation. Use the current presentation notes and measured demo timings for reviews.
-

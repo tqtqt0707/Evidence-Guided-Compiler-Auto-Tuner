@@ -19,4 +19,3 @@ scratch-tmp/
 .env
 .env.*
 !.env.example
-
