@@ -73,11 +73,17 @@ def execute(args: list[str], log_dir: Path, label: str, *, timeout: int = COMPIL
 
 
 class Toolchain:
-    def __init__(self) -> None:
-        missing = [name for name, executable in TOOL_NAMES.items() if not shutil.which(executable)]
+    major = 21
+
+    def __init__(self, major: int = 21) -> None:
+        if type(major) is not int or not 18 <= major <= 30:
+            raise ValueError("LLVM major must be an integer from 18 to 30")
+        self.major = major
+        tool_names = {name: executable.rsplit("-", 1)[0] + f"-{major}" for name, executable in TOOL_NAMES.items()}
+        missing = [name for name, executable in tool_names.items() if not shutil.which(executable)]
         if missing:
-            raise RuntimeError(f"Missing LLVM tools: {', '.join(missing)}. Run inside Ubuntu WSL and install clang-21 llvm-21.")
-        self.paths = {name: str(Path(shutil.which(executable) or "").resolve()) for name, executable in TOOL_NAMES.items()}
+            raise RuntimeError(f"Missing LLVM tools: {', '.join(missing)}. Run inside Ubuntu WSL and install clang-{major} llvm-{major}.")
+        self.paths = {name: str(Path(shutil.which(executable) or "").resolve()) for name, executable in tool_names.items()}
         self.clang_flags = ["-std=c17", "-fno-lto", "-fPIE", "-march=x86-64"]
         self.llc_flags = ["-O3", "-filetype=obj", "-mcpu=x86-64", "-relocation-model=pic"]
         self.link_flags = ["-pie"]
@@ -93,8 +99,8 @@ class Toolchain:
             lines = (result.stdout or result.stderr).splitlines()
             versions[name] = lines[0] if result.returncode == 0 and lines else "unavailable"
             match = re.search(r"\bversion\s+(\d+\.\d+\.\d+)", versions[name])
-            if not match or not match.group(1).startswith("21."):
-                raise RuntimeError(f"Expected LLVM 21, found {name}: {versions[name]}")
+            if not match or not match.group(1).startswith(f"{self.major}."):
+                raise RuntimeError(f"Expected LLVM {self.major}, found {name}: {versions[name]}")
             numeric_versions.add(match.group(1))
         if len(numeric_versions) != 1:
             raise RuntimeError(f"LLVM tools must have matching versions: {versions}")

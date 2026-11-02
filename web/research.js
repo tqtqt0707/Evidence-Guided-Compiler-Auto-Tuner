@@ -24,8 +24,9 @@ function comparisons(phase){
  return Object.entries(rows).map(([k,v])=>[k,time(v.candidate_median_ns),time(v.baseline_median_ns),pct(v.runtime_reduction_percent),v.paired_wins+"/"+v.paired_rounds,v.label]);
 }
 function loadReport(data,kind="Saved compiler evidence"){
+ if(data?.kind==="deployment")return loadDeploymentReport(data);
  if(data?.schema_version!==1||data.status!=="completed"||!data.provenance||!data.search||!data.cfg)throw Error("Not a completed Research Lab report");
- report=data;$("report").hidden=false;$("configuration").hidden=true;$("error").hidden=true;
+ report=data;$("report").hidden=false;$("deployment-report").hidden=true;$("configuration").hidden=true;$("error").hidden=true;
  text("report-title",(data.request.benchmark_id==="custom"?"Custom C kernel":data.request.benchmark_id)+" · research evidence");
  text("evidence-badge",kind);
  const env=data.provenance.environment;

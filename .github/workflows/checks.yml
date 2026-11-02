@@ -6,7 +6,7 @@ jobs:
     container: ubuntu:26.04
     steps:
       - name: Install LLVM and Python
-        run: apt-get update && apt-get install -y git clang-21 llvm-21 python3-venv
+        run: apt-get update && apt-get install -y git clang-20 llvm-20 clang-21 llvm-21 python3-venv
       - uses: actions/checkout@v4
       - name: Install project
         run: |

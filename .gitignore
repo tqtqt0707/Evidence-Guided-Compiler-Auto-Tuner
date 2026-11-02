@@ -15,6 +15,7 @@ browser-evidence.png
 test-results/
 .coverage
 htmlcov/
+scratch-tmp/
 .env
 .env.*
 !.env.example

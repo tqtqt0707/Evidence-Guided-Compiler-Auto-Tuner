@@ -189,3 +189,18 @@ AutoPass and Compiler-R1 motivate evidence-guided pass tuning, but this project 
 ## Research Lab
 
 Open /research for eight compiler-backed extensions: pass ablation/order experiments, actual LLVM remarks, workload robustness maps, adaptive cross-program experience, trusted custom C benchmarking, constrained objectives, interactive control flow, and stronger correctness validation. See [Research Lab documentation](docs/RESEARCH_LAB.md) for contracts, API, reproducibility and verification limits. The optional Alive2 adapter clearly reports unavailable or unsupported cases.
+
+### Deployment experiments
+
+The same page now offers **Challenge an optimization before deployment**: active
+search for regression-inducing workloads, actual one/two-version LLVM comparison
+with remark-prioritized sequence repair, and an empirical size/distribution envelope
+with a real baseline-fallback launcher. Search, calibration and final holdout use
+separate seed namespaces. Short runs cannot enable optimized dispatch; launcher
+overhead is measured separately. Missing compilers are reported rather than simulated.
+These are experimental contributions to evaluate, not established novelty or speedup
+claims. See [deployment workflow and methodology](docs/DEPLOYMENT_EXPERIMENTS.md).
+
+```bash
+python -m autotuner.deployment tune --output-dir ./results
+```

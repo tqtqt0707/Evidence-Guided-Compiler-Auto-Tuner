@@ -1,5 +1,15 @@
 # Current project status
 
+## Current implementation additions (2 November 2026)
+
+The README, [Research Lab](RESEARCH_LAB.md) and
+[deployment experiments](DEPLOYMENT_EXPERIMENTS.md) describe the current implementation.
+It now includes five built-in programs, optional OpenAI-guided classic proposals,
+eight Research Lab analyses, and counterexample/migration/envelope deployment jobs.
+The older dated status below is retained as historical evidence and does not describe
+the full current feature set. New deployment methods need empirical novelty and
+performance evaluation; implementation alone does not establish those claims.
+
 Updated 20 October 2026.
 
 The local correctness-checked LLVM tuner is implemented. It supports dot product, integer matrix multiplication, and histogram benchmarks; rule-based guided and seeded random policies; empty-action and direct Clang -O3 controls; tuning/held-out confirmation; SQLite records; CLI; localhost API; a browser evidence page; and optional LangGraph orchestration. It makes zero LLM calls.

@@ -8,6 +8,43 @@ const root = path.resolve(__dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'benchmarks/manifest.json')));
 const bundle = JSON.parse(fs.readFileSync(path.join(root, 'examples/full-dot/bundle.json')));
 
+test('deployment UI submits real settings and renders conservative evidence without invented wins', async t => {
+  let submitted;
+  const fixture = {
+    schema_version: 1, kind: 'deployment', status: 'completed', id: 'deployment-fixture', created_at: '2026-11-02T00:00:00Z',
+    request: { benchmark_id: 'histogram' },
+    provenance: { environment: { cpu_model: 'Fixture CPU', target_triple: 'x86_64-linux' }, measurement: 'Synthetic UI fixture' },
+    search: { spent: 4, budget: 12, selected_actions: ['simplifycfg'], baseline_preferred: true,
+      events: [{ operation: 'challenge_workload', workload: { size: 64, distribution: 'skewed' }, spent: 2 }] },
+    counterexamples: [],
+    migration: { status: 'requires_second_compiler', versions: [21], diagnostics: [], remark_delta: {},
+      candidate_scores: [{ candidate: 'c0', actions: ['simplifycfg'], worst_ratio: 1.2 }] },
+    envelope: { cells: [{ distribution: 'uniform', min_size: 16, max_size: 64, decision: 'insufficient_evidence', measured_points: [] }] },
+    holdout: [], dispatch_confirmation: [], limits: ['Synthetic fixture; no performance claim']
+  };
+  const page = await launch(t, async (route, url, json) => {
+    if (url.pathname === '/research') { await route.fulfill({ body: fs.readFileSync(path.join(root, 'web/research.html')), contentType: 'text/html' }); return true; }
+    if (url.pathname === '/v1/research/capabilities') { await json({ compiler_available: true, deployment_compilers: [20, 21], custom_example: '', reference_example: '' }); return true; }
+    if (url.pathname === '/v1/research/deployment/jobs') { submitted = route.request().postDataJSON(); await json({ id: 'deployment-fixture' }); return true; }
+    if (url.pathname === '/v1/research/jobs/deployment-fixture') { await json({ status: 'completed', stage: 'completed' }); return true; }
+    if (url.pathname === '/v1/research/jobs/deployment-fixture/report') { await json(fixture); return true; }
+    return false;
+  });
+  await page.goto('http://autotuner.test/research');
+  await page.waitForFunction(() => !document.getElementById('run-deployment').disabled);
+  assert.equal(await page.locator('#deployment-versions').inputValue(), '20, 21');
+  await page.locator('#run-deployment').click();
+  await page.locator('#deployment-report').waitFor({ state: 'visible' });
+  assert.deepEqual(submitted.compiler_versions, [20, 21]);
+  assert.equal(submitted.envelope_budget, 18);
+  assert.match(await page.locator('#deployment-envelope').innerText(), /insufficient_evidence/);
+  assert.match(await page.locator('#deployment-migration-status').innerText(), /requires a second installed/);
+  assert.match(await page.locator('#deployment-summary').innerText(), /Direct -O3 is preferred/);
+  assert.match(await page.locator('#deployment-download').getAttribute('download'), /deployment-fixture/);
+  await page.locator('#report-file').setInputFiles({ name: 'deployment.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fixture)) });
+  assert.equal(await page.locator('#error').isVisible(), false);
+});
+
 async function launch(t, custom = () => false) {
   const browser = await chromium.launch({ headless: true, executablePath: process.env.BROWSER_EXECUTABLE || undefined });
   t.after(() => browser.close());
