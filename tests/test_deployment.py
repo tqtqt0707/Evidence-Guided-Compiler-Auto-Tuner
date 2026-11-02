@@ -75,6 +75,7 @@ class FakeCompiler:
 
     def __init__(self, req, directory, major, progress, deadline):
         self.req,self.directory,self.major = req,Path(directory),major
+        self.tc=SimpleNamespace(major=major)
         self.directory.mkdir(parents=True)
         self.environment = fake_environment()
         self.environment["versions"] = {"opt":f"LLVM {major}.1.0"}
@@ -166,3 +167,25 @@ def test_deployment_api_strict_validation_and_unavailable_tools(monkeypatch):
         for body in [{"rounds":"10"},{"compiler_versions":[21,21]},{"distributions":["bad"]}]:
             assert client.post("/v1/research/deployment/jobs",json=body).status_code==422
 
+
+def test_deployment_api_respects_exclusive_worker_and_submits_the_right_runner(monkeypatch):
+    from fastapi.testclient import TestClient
+    from autotuner.api import app
+    monkeypatch.setattr(d,"available_compilers",lambda:[21])
+    with TestClient(app) as client:
+        submitted=[]
+        def submit(data,release,kind):
+            submitted.append((data,kind))
+            release()
+            return {"id":"fixture","status":"queued"}
+        monkeypatch.setattr(app.state.research,"submit",submit)
+        assert client.post("/v1/research/deployment/jobs",json={}).status_code==202
+        assert submitted[0][1]=="deployment"
+        assert submitted[0][0]["compiler_versions"]==[21]
+        assert app.state.inspection_lock.acquire(blocking=False)
+        try:
+            assert client.post("/v1/research/deployment/jobs",json={}).status_code==409
+        finally:
+            app.state.inspection_lock.release()
+        app.state.closing=True
+        assert client.post("/v1/research/deployment/jobs",json={}).status_code==503

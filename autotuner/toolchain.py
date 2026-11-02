@@ -73,6 +73,8 @@ def execute(args: list[str], log_dir: Path, label: str, *, timeout: int = COMPIL
 
 
 class Toolchain:
+    major = 21
+
     def __init__(self, major: int = 21) -> None:
         if type(major) is not int or not 18 <= major <= 30:
             raise ValueError("LLVM major must be an integer from 18 to 30")
@@ -204,4 +206,3 @@ class Toolchain:
 def command_manifest(path: Path, results: list[CommandResult]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps([result.as_dict() for result in results], indent=2), encoding="utf-8")
-

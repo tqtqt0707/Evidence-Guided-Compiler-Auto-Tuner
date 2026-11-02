@@ -90,8 +90,7 @@ def create_deployment(body:DeploymentBody,request:Request):
     if request.app.state.closing:return error(503,"SERVICE_STOPPING","The service is shutting down")
     try:data=validate_deployment(body.model_dump(exclude_none=True))
     except ValueError as exc:return error(422,"INVALID_REQUEST",str(exc))
-    import os
-    if os.name=="nt" or set(data["compiler_versions"])-set(available_compilers()):
+    if set(data["compiler_versions"])-set(available_compilers()):
         return error(503,"TOOLCHAIN_UNAVAILABLE","Install every requested matching LLVM toolchain on x86-64 Linux")
     lock=request.app.state.inspection_lock
     if not lock.acquire(blocking=False):return error(409,"COMPILER_BUSY","Wait for the active compiler job")
@@ -118,4 +117,3 @@ def download(job_id:UUID,request:Request):
 def objectives(body:ObjectiveBody):
     try:return choose_objective(**body.model_dump())
     except (ValueError,TypeError) as exc:return error(422,"INVALID_OBJECTIVE",str(exc))
-
