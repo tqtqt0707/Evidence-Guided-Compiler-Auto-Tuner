@@ -104,7 +104,11 @@ a report supplied by someone else.
 
 Two further reserved seeds, disjoint from search and calibration, evaluate random
 held-out sizes per distribution after all choices are frozen. They never repair the
-sequence or change guard boundaries. The actual Python launcher is measured in
+sequence or change guard boundaries. A final release gate rejects optimized deployment
+if any held-out candidate execution is invalid, or if the target compiler fails to
+confirm a win for a held-out workload that the frozen guard would optimize. Rejection
+uses baseline dispatch everywhere; it does not search for another policy using holdout
+results. The actual Python launcher is measured in
 separate randomized paired rounds, including interpreter startup, context/hash
 checks and exec overhead. This overhead can outweigh a kernel improvement and is
 shown separately. The launcher is an auditable local prototype, not a zero-cost

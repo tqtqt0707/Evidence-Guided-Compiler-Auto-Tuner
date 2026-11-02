@@ -63,6 +63,15 @@ def test_actual_remark_changes_prioritize_sequence_repairs():
     assert d.evidence_delta([a]) == {}
 
 
+def test_final_validation_rejects_wrong_results_or_unconfirmed_guarded_performance():
+    row=dict(compiler=21,status="valid",comparison={"label":"win"})
+    case=dict(decision="optimized",comparisons=[row])
+    assert d.release_gate([case],21)["eligible"]
+    assert not d.release_gate([{**case,"comparisons":[{**row,"status":"failed"}]}],21)["eligible"]
+    assert not d.release_gate([{**case,"comparisons":[{**row,"comparison":{"label":"loss"}}]}],21)["eligible"]
+    assert not d.release_gate([],21)["eligible"]
+
+
 def fake_environment():
     return dict(versions={"opt":"LLVM 21.1.0"},target_triple="x86_64-linux",cpu_model="test",
                 clang_flags=[],llc_flags=[],link_flags=[])
@@ -150,6 +159,11 @@ def test_dispatch_verifies_context_and_artifacts_and_falls_back(monkeypatch,tmp_
     args=["--size","30","--seed","555","--repeat","2","--distribution","uniform"]
     path=tmp_path/"run"/"report.json"
     assert d.dispatch(path,args,replace=False)["decision"]=="optimized"
+    report["deployment_gate"]={"eligible":False,"reason":"Rejected final validation"}
+    path.write_text(json.dumps(report))
+    assert d.dispatch(path,args,replace=False)["decision"]=="baseline"
+    report["deployment_gate"]["eligible"]=True
+    path.write_text(json.dumps(report))
     (tmp_path/"run"/report["artifacts"]["optimized"]["path"]).write_bytes(b"tampered")
     assert d.dispatch(path,args,replace=False)["decision"]=="baseline"
     (tmp_path/"run"/report["artifacts"]["baseline"]["path"]).write_bytes(b"tampered")

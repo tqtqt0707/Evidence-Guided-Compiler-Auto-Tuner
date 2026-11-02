@@ -5,7 +5,7 @@ function loadDeploymentReport(data){
  $("deployment-report").hidden=false;$("report").hidden=true;$("error").hidden=true;
  const env=data.provenance.environment;
  text("deployment-provenance",data.created_at+" · "+env.cpu_model+" · "+env.target_triple+" · "+data.provenance.measurement);
- text("deployment-summary","Search used "+data.search.spent+" / "+data.search.budget+" comparisons. Selected sequence: "+(data.search.selected_actions?seq(data.search.selected_actions):"none valid")+". "+(data.search.baseline_preferred?"Direct -O3 is preferred on worst observed search runtime.":"Candidate improves worst observed search runtime; final holdout is reported separately."));
+ text("deployment-summary","Search used "+data.search.spent+" / "+data.search.budget+" comparisons. Selected sequence: "+(data.search.selected_actions?seq(data.search.selected_actions):"none valid")+". "+(data.search.baseline_preferred?"Direct -O3 is preferred on worst observed search runtime.":"Candidate improves worst observed search runtime; final holdout is reported separately.")+" "+(data.deployment_gate?.reason||"No final release authorization in this saved report."));
  table("deployment-events",["Operation","Pass sequence / workload","Budget spent"],data.search.events.map(e=>[e.operation,e.actions?seq(e.actions):JSON.stringify(e.workload),e.spent]));
  const comparisonRow=r=>[r.compiler,r.candidate??"—",r.workload.size,r.workload.distribution,pct(r.comparison?.runtime_reduction_percent),r.status==="valid"?r.comparison.label:r.error];
  table("deployment-counterexamples",["LLVM","Candidate","Size","Distribution","Reduction vs -O3","Fresh confirmation"],data.counterexamples.map(comparisonRow));

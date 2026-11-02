@@ -179,6 +179,17 @@ def choose_dispatch(envelope, workload):
     return "baseline", "Outside a calibrated winning region or insufficient evidence"
 
 
+def release_gate(holdout, target):
+    """Final validation can reject deployment, but cannot tune a new policy."""
+    if not holdout or any(not case["comparisons"] or any(r["status"] != "valid" for r in case["comparisons"]) for case in holdout):
+        return dict(eligible=False, reason="Final holdout has missing or invalid candidate evidence")
+    for case in holdout:
+        target_rows = [r for r in case["comparisons"] if r["compiler"] == target]
+        if not target_rows or (case["decision"] == "optimized" and any(r["comparison"]["label"] != "win" for r in target_rows)):
+            return dict(eligible=False, reason="Final holdout does not confirm optimized dispatch in a guarded region")
+    return dict(eligible=True, reason="Final validation accepted the frozen policy; empirical scope still applies")
+
+
 class DeploymentCompiler(ResearchRunner):
     def __init__(self, req, directory, major, progress, deadline):
         # Use the existing build/paired measurement implementation without running the eight-view suite.
@@ -409,12 +420,13 @@ class DeploymentRunner:
                 events=events, workloads=workloads, records=records, selected_actions=list(selected) if selected else None,
                 baseline_preferred=not math.isfinite(scores[best]) or scores[best]>=1),
             counterexamples=counterexamples, envelope=envelope, holdout=holdout, artifacts=artifacts,
+            deployment_gate=release_gate(holdout, req["compiler_versions"][-1]),
             budgets=dict(envelope_spent=envelope_spent, envelope_limit=req["envelope_budget"],
                          final_holdout_cases=len(holdout), counterexample_comparisons=len(counterexamples)),
             limits=["Experimental methods; research novelty and performance superiority are unestablished",
                     "No universal correctness or performance guarantee; independent small-input checks and per-execution checksums only",
                     "Single-host measurements; short runs are demo_only and cannot authorize optimized dispatch",
-                    "Search, calibration and final holdout seed namespaces are disjoint; no final-holdout feedback"],
+                    "Search, calibration and final holdout seed namespaces are disjoint; no final-holdout tuning feedback"],
             commands=[dict(compiler=c.tc.major, commands=c.commands) for c in compilers])
         atomic_json(self.directory / "dispatch-policy.json", result)
         # Real launcher includes Python startup, policy lookup, checks and exec overhead.
@@ -462,8 +474,8 @@ def dispatch(report_path, argv, replace=True):
     if context_key(current) != report["provenance"]["context_hash"]:
         raise ValueError("Compiler or CPU context changed; recalibrate before dispatch")
     decision, reason = choose_dispatch(report["envelope"], w)
-    if not report["artifacts"].get("optimized"):
-        decision = "baseline"
+    if not report["artifacts"].get("optimized") or not report.get("deployment_gate", {}).get("eligible", False):
+        decision, reason = "baseline", "Final release gate did not authorize optimized deployment"
     artifact = report["artifacts"][decision]
     binary = (report_path.parent / artifact["path"]).resolve()
     if not binary.is_relative_to(report_path.parent) or not binary.is_file() or config.sha256_file(binary) != artifact["sha256"]:
