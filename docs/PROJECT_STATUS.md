@@ -1,5 +1,15 @@
 # Current project status
 
+## Current implementation additions (2 November 2026)
+
+The README, [Research Lab](RESEARCH_LAB.md) and
+[deployment experiments](DEPLOYMENT_EXPERIMENTS.md) describe the current implementation.
+It now includes five built-in programs, optional OpenAI-guided classic proposals,
+eight Research Lab analyses, and counterexample/migration/envelope deployment jobs.
+The older dated status below is retained as historical evidence and does not describe
+the full current feature set. New deployment methods need empirical novelty and
+performance evaluation; implementation alone does not establish those claims.
+
 Updated 20 October 2026.
 
 The local correctness-checked LLVM tuner is implemented. It supports dot product, integer matrix multiplication, and histogram benchmarks; rule-based guided and seeded random policies; empty-action and direct Clang -O3 controls; tuning/held-out confirmation; SQLite records; CLI; localhost API; a browser evidence page; and optional LangGraph orchestration. It makes zero LLM calls.
@@ -49,3 +59,4 @@ The final local checks passed: 31 Python tests and six Chromium browser tests. B
 The expanded suite passes **104 Python tests and eight Chromium tests**. The browser suite now includes a complete workflow against the actual FastAPI worker and LLVM through a stdio ASGI bridge. Clean sdist/wheel installation, resource hashes, standalone CLI commands, and portable exports also pass. In-process Python coverage is 90.7% of statements and 80.1% of branches.
 
 New fixes cover structured toolchain failures, calibration input/checksum errors, duplicate execution before preflight, Ctrl+C process/state cleanup, orphan recovery, clean CLI errors, and exact display of saved uint64 seeds. Automated tests use disposable records and cache directories. See [test plan](TEST_PLAN.md) and [full results and limits](TEST_RESULTS_2026-10-20.md). Hosted CI and actual TCP/Uvicorn socket behavior have not been verified in this run.
+

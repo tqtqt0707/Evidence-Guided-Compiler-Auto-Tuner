@@ -24,8 +24,9 @@ function comparisons(phase){
  return Object.entries(rows).map(([k,v])=>[k,time(v.candidate_median_ns),time(v.baseline_median_ns),pct(v.runtime_reduction_percent),v.paired_wins+"/"+v.paired_rounds,v.label]);
 }
 function loadReport(data,kind="Saved compiler evidence"){
+ if(data?.kind==="deployment")return loadDeploymentReport(data);
  if(data?.schema_version!==1||data.status!=="completed"||!data.provenance||!data.search||!data.cfg)throw Error("Not a completed Research Lab report");
- report=data;$("report").hidden=false;$("configuration").hidden=true;$("error").hidden=true;
+ report=data;$("report").hidden=false;$("deployment-report").hidden=true;$("configuration").hidden=true;$("error").hidden=true;
  text("report-title",(data.request.benchmark_id==="custom"?"Custom C kernel":data.request.benchmark_id)+" · research evidence");
  text("evidence-badge",kind);
  const env=data.provenance.environment;
@@ -121,3 +122,4 @@ $("research-form").onsubmit=async e=>{
 (async()=>{try{const data=await json("/v1/research/capabilities");compilerReady=data.compiler_available;text("capability",compilerReady?"LLVM available · local execution":"Viewer mode · Linux LLVM required for new runs");$("run-lab").disabled=!compilerReady;$("kernel-source").value=data.custom_example;$("reference-source").value=data.reference_example;}catch(ex){error(ex.message);$("run-lab").disabled=true;}})();
 
 $("open-custom-evidence").onclick=async()=>{try{loadReport(await json("/examples/research/custom-evidence.json"),"Bundled custom C compiler run");}catch(ex){error(ex.message);}};
+

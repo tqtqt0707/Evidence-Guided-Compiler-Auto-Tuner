@@ -98,10 +98,13 @@ def validate_request(data):
     return req
 
 def capabilities():
+    from .deployment import available_compilers
     paths={name:shutil.which(exe) for name,exe in config.TOOL_NAMES.items()}
     return {"compiler_available":all(paths.values()) and os.name!="nt","required_platform":"x86-64 Linux / LLVM 21",
             "paths":paths,"alive2_available":bool(shutil.which("alive-tv")),"custom_execution":"Trusted local code only; CPU/address-space/file limits are not a security sandbox",
-            "features":["pass-contribution","optimization-remarks","robustness","adaptive-memory","custom-C","constrained-objectives","CFG","differential-validation"]}
+            "deployment_compilers":available_compilers(),
+            "features":["pass-contribution","optimization-remarks","robustness","adaptive-memory","custom-C","constrained-objectives","CFG","differential-validation",
+                        "counterexample-search","compiler-migration","measured-deployment-envelope"]}
 
 class ResearchRunner:
     def __init__(self,request,directory,progress=None):
@@ -330,12 +333,17 @@ class ResearchManager:
         from concurrent.futures import ThreadPoolExecutor
         self.base=Path(base or config.DATA_DIR/"research");self.base.mkdir(parents=True,exist_ok=True)
         self.pool=ThreadPoolExecutor(max_workers=1,thread_name_prefix="research");self.guard=threading.Lock()
-    def submit(self,request,release):
-        request=validate_request(request);job_id=str(uuid4());directory=self.base/job_id
+    def submit(self,request,release,kind="research"):
+        if kind=="deployment":
+            from .deployment import DeploymentRunner, validate_request as validate_deployment
+            runner=DeploymentRunner;request=validate_deployment(request)
+        else:
+            runner=ResearchRunner;request=validate_request(request)
+        job_id=str(uuid4());directory=self.base/job_id
         atomic_json(directory/"state.json",{"id":job_id,"status":"queued","stage":"queued"})
         def progress(stage):atomic_json(directory/"state.json",{"id":job_id,"status":"completed" if stage=="completed" else "running","stage":stage})
         def work():
-            try:ResearchRunner(request,directory,progress).execute()
+            try:runner(request,directory,progress).execute()
             except Exception as exc:atomic_json(directory/"state.json",{"id":job_id,"status":"failed","stage":"failed","error":str(exc)[:2000]})
             finally:release()
         self.pool.submit(work);return {"id":job_id,"status":"queued"}
@@ -360,3 +368,4 @@ def main():
     result=ResearchRunner(request,out.parent/("research-"+str(uuid4())),lambda x:print(x,flush=True)).execute()
     atomic_json(out,result);print(str(out))
 if __name__=="__main__":main()
+

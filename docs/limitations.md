@@ -1,5 +1,12 @@
 # Limitations
 
+The list below describes the original study snapshot. The current implementation
+has five built-in benchmarks, optional LLM proposals, trusted-local custom C in the
+Research Lab, and deployment experiments; see [current README](../README.md) and
+[deployment limits](DEPLOYMENT_EXPERIMENTS.md). Historical results remain limited
+to their original programs, settings and hosts. New features do not retroactively
+expand the evidence supporting those measurements.
+
 - The study covers three built-in single-file integer C programs on one x86-64 WSL2 laptop. It does not establish a general LLVM tuning advantage.
 - Direct `clang -O3` uses a broader, target-aware optimization pipeline than a short sequence appended to a common `-O1` bitcode seed. The empty-action control isolates the added pass effect; the `-O3` comparison is practical context.
 - A run uses one random seed per strategy. Even with fresh finalist confirmation, the guided-versus-random result is descriptive for these particular searches. Multiple independent search seeds are a future study.
@@ -12,3 +19,4 @@
 - Cancellation is cooperative between compiler stages/executions, not immediate process interruption. Retry creates a new experiment and does not resume partial search state.
 - Full win/loss classification needs at least ten matched confirmation rounds, a 2% median difference, and agreement in at least 80% of paired rounds. User-selected shorter full runs remain inconclusive. These thresholds are exploratory, not a significance test.
 - The original proposal deck and speech PDFs are historical artifacts. Their latency and AI-service promises do not describe this implementation. Use the current presentation notes and measured demo timings for reviews.
+

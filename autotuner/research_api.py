@@ -34,6 +34,21 @@ class ObjectiveBody(BaseModel):
     max_slowdown_percent:float=Field(default=100,ge=0)
     baseline_ns:float|None=Field(default=None,gt=0)
 
+class DeploymentBody(BaseModel):
+    model_config=ConfigDict(extra="forbid",strict=True)
+    benchmark_id:str="histogram"
+    actions:list[str]=Field(default_factory=lambda:["simplifycfg","loop-vectorize"],min_length=1,max_length=4)
+    size:int=Field(default=100000,ge=1,le=16000000)
+    seed:int=Field(default=29,ge=0,le=9007199254740991)
+    repeat:int=Field(default=8,ge=1,le=100)
+    rounds:int=Field(default=10,ge=3,le=15)
+    search_budget:int=Field(default=12,ge=4,le=40)
+    min_size:int=Field(default=1000,ge=1,le=16000000)
+    max_size:int=Field(default=1000000,ge=1,le=16000000)
+    envelope_budget:int=Field(default=18,ge=6,le=36)
+    compiler_versions:list[int]=Field(default_factory=lambda:[21],min_length=1,max_length=2)
+    distributions:list[str]|None=Field(default=None,min_length=1,max_length=3)
+
 def error(status,code,message):
     return JSONResponse(status_code=status,content={"error":{"code":code,"message":message}})
 
@@ -69,6 +84,25 @@ def job(job_id:UUID,request:Request):
     try:return request.app.state.research.state(str(job_id))
     except KeyError:return error(404,"NOT_FOUND","Research job not found")
 
+@router.post("/deployment/jobs",status_code=202)
+def create_deployment(body:DeploymentBody,request:Request):
+    from .deployment import available_compilers, validate_request as validate_deployment
+    if request.app.state.closing:return error(503,"SERVICE_STOPPING","The service is shutting down")
+    try:data=validate_deployment(body.model_dump(exclude_none=True))
+    except ValueError as exc:return error(422,"INVALID_REQUEST",str(exc))
+    import os
+    if os.name=="nt" or set(data["compiler_versions"])-set(available_compilers()):
+        return error(503,"TOOLCHAIN_UNAVAILABLE","Install every requested matching LLVM toolchain on x86-64 Linux")
+    lock=request.app.state.inspection_lock
+    if not lock.acquire(blocking=False):return error(409,"COMPILER_BUSY","Wait for the active compiler job")
+    try:
+        current=request.app.state.service.store.one("SELECT experiment_id FROM worker_slot WHERE singleton_id=1")
+        if current and current["experiment_id"]:
+            lock.release();return error(409,"COMPILER_BUSY","Wait for the active tuning experiment")
+        return request.app.state.research.submit(data,lock.release,kind="deployment")
+    except Exception:
+        lock.release();raise
+
 @router.get("/jobs/{job_id}/report")
 def report(job_id:UUID,request:Request):
     try:return request.app.state.research.report(str(job_id))
@@ -84,3 +118,4 @@ def download(job_id:UUID,request:Request):
 def objectives(body:ObjectiveBody):
     try:return choose_objective(**body.model_dump())
     except (ValueError,TypeError) as exc:return error(422,"INVALID_OBJECTIVE",str(exc))
+
